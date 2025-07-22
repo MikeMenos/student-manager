@@ -1,0 +1,7 @@
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_PASSWORD: TestPassword
+    ports:
+      - "5001:5432"
