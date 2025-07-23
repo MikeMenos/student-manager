@@ -15,6 +15,13 @@ export interface Student {
   parentInfo: ParentInfo[];
 }
 
+export interface ParentInfoDto {
+  id: string;
+  parentName: string;
+  relation: string;
+  phone: number | null;
+  email: string;
+}
 export interface StudentDto {
   id: string;
   firstName: string;
@@ -22,5 +29,5 @@ export interface StudentDto {
   age: string;
   grade: string;
   homeAddress: string;
-  parentInfo: ParentInfo[];
+  parentInfo: ParentInfoDto[];
 }

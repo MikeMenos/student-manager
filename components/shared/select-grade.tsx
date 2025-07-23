@@ -6,13 +6,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { gradeOptions } from "@/lib/utils";
 
 export default function SelectGrade({
   onSelectGrade,
   hasAllGradesOption = true,
 }: {
   onSelectGrade: (grade: string) => void;
-  hasAllGradesOption: boolean;
+  hasAllGradesOption?: boolean;
 }) {
   return (
     <Select
@@ -20,18 +21,16 @@ export default function SelectGrade({
       onValueChange={onSelectGrade as never}
       required
     >
-      <SelectTrigger className="w-32">
-        <SelectValue />
+      <SelectTrigger>
+        <SelectValue placeholder="Select grade" />
       </SelectTrigger>
       <SelectContent>
         {hasAllGradesOption && <SelectItem value="all">All Grades</SelectItem>}
-        <SelectItem value="k">Kindergarten</SelectItem>
-        <SelectItem value="1">1st Grade</SelectItem>
-        <SelectItem value="2">2nd Grade</SelectItem>
-        <SelectItem value="3">3rd Grade</SelectItem>
-        <SelectItem value="4">4th Grade</SelectItem>
-        <SelectItem value="5">5th Grade</SelectItem>
-        <SelectItem value="6">6th Grade</SelectItem>
+        {gradeOptions.map((grade) => (
+          <SelectItem key={grade.value} value={grade.value}>
+            {grade.label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );

@@ -16,3 +16,11 @@ export function updateFormField<T>(form: T, path: string, value: any): T {
 
   return updated;
 }
+
+export function capitalizeFirstLetter(str: string) {
+  return str
+    .split(" ")
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}

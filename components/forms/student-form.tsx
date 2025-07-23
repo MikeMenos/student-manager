@@ -200,10 +200,10 @@ export default function StudentForm() {
                         <SelectValue placeholder="Select relation" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="mother">Mother</SelectItem>
-                        <SelectItem value="father">Father</SelectItem>
-                        <SelectItem value="guardian">Guardian</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="Mother">Mother</SelectItem>
+                        <SelectItem value="Father">Father</SelectItem>
+                        <SelectItem value="Guardian">Guardian</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

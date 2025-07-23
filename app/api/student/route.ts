@@ -1,6 +1,33 @@
 import { NextResponse } from "next/server";
 import { Student, StudentDto } from "@/types/student";
 import prisma from "@/lib/prisma";
+import { capitalizeFirstLetter } from "@/lib/helpers";
+
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const filter = searchParams.get("filter");
+
+  try {
+    const students = await prisma.student.findMany({
+      where: filter
+        ? {
+            OR: [
+              { firstName: { contains: filter, mode: "insensitive" } },
+              { lastName: { contains: filter, mode: "insensitive" } },
+              { grade: { contains: filter, mode: "insensitive" } },
+            ],
+          }
+        : undefined,
+      include: {
+        parentInfo: true, // 👈 include the parentInfo relation
+      },
+    });
+
+    return NextResponse.json({ students });
+  } catch (error) {
+    return NextResponse.json({ error });
+  }
+}
 
 export async function POST(req: Request) {
   try {
@@ -8,15 +35,16 @@ export async function POST(req: Request) {
 
     const newStudent = (await prisma.student.create({
       data: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        age: formData.grade,
+        firstName: capitalizeFirstLetter(formData.firstName),
+        lastName: capitalizeFirstLetter(formData.lastName),
+        age: formData.age,
         grade: formData.grade,
         homeAddress: formData.homeAddress,
         parentInfo: {
           create: formData.parentInfo.map((parent) => ({
             ...parent,
-            phone: parent.phone === null ? 0 : parent.phone,
+            phone: parent.phone!,
+            parentName: capitalizeFirstLetter(parent.parentName),
           })),
         },
       },

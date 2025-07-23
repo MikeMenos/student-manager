@@ -1,25 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
-import { BookOpen, Settings, Users } from "lucide-react";
+import Sidebar from "@/components/shared/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { headers } from "next/headers";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Providers } from "./providers";
-import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,65 +26,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = headers();
-  const pathname = (await headersList).get("x-pathname");
-
-  const menuItems = [
-    { title: "Classes", icon: BookOpen, url: "/classes" },
-    { title: "Students", icon: Users, url: "/students" },
-    { title: "Settings", icon: Settings, url: "#" },
-  ];
-
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SidebarProvider>
-          <Sidebar collapsible="icon">
-            <SidebarHeader className="border-b">
-              {/* <div className="flex items-center gap-2 px-4 py-2">
-            <GraduationCap className="h-6 w-6 text-blue-600" />
-            <span className="font-semibold text-lg">EduManage</span>
-            </div> */}
-            </SidebarHeader>
-            <SidebarContent>
-              <SidebarGroup>
-                <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {menuItems.map((item, idx) => (
-                      <SidebarMenuItem key={idx}>
-                        <SidebarMenuButton
-                          asChild
-                          isActive={pathname === item.url}
-                        >
-                          <a href={item.url}>
-                            <item.icon className="h-4 w-4" />
-                            <span>{item.title}</span>
-                          </a>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    ))}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            </SidebarContent>
-            <SidebarFooter className="border-t">
-              <div className="flex items-center gap-2 px-4 py-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
-                  <AvatarFallback>TC</AvatarFallback>
-                </Avatar>
-                <div className="flex flex-col">
-                  <span className="text-sm font-medium">Ms. Thompson</span>
-                  <span className="text-xs text-muted-foreground">
-                    Principal
-                  </span>
-                </div>
-              </div>
-            </SidebarFooter>
-          </Sidebar>
+          <Sidebar />
           <Providers>
             <SidebarInset>{children}</SidebarInset>
           </Providers>
