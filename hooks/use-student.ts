@@ -1,9 +1,14 @@
 import { initialStudentFormState } from "@/components/forms/student-form";
 import { errorToast, successToast } from "@/components/shared/toasts";
-import { createStudent, getAllStudents } from "@/lib/api/student/api";
-import { STUDENTS_QUERY_KEY } from "@/lib/utils";
+import {
+  createStudent,
+  getAllStudents,
+  getSingleStudent,
+} from "@/lib/api/student/api";
+import { STUDENT_QUERY_KEY, STUDENTS_QUERY_KEY } from "@/lib/utils";
 import { Student } from "@/types/student";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { Dispatch, SetStateAction } from "react";
 
 export const useGetAllStudents = ({
@@ -27,6 +32,21 @@ export const useGetAllStudents = ({
   };
 };
 
+export const useGetSingleStudent = (id: string) => {
+  const { data, isLoading, isError, refetch, isRefetching } = useQuery({
+    queryKey: [STUDENT_QUERY_KEY, id],
+    queryFn: () => getSingleStudent(id),
+  });
+
+  return {
+    singleStudent: data,
+    isSingleStudentLoading: isLoading,
+    isSingleStudentError: isError,
+    refetchSingleStudent: refetch,
+    isSingleStudentRefetching: isRefetching,
+  };
+};
+
 export const useCreateStudent = (
   formData: Student,
   setFormData: Dispatch<SetStateAction<Student>>,
@@ -45,8 +65,8 @@ export const useCreateStudent = (
           queryKey: [STUDENTS_QUERY_KEY],
         });
       },
-      onError: ({ message }: { message: string }) => {
-        errorToast(message);
+      onError: (error: AxiosError<{ message: string }>) => {
+        errorToast(error.response!.data.message!);
       },
     });
   return { createStudentMutation, isCreateStudentLoading };

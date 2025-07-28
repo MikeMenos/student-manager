@@ -19,7 +19,7 @@ export async function GET(req: Request) {
           }
         : undefined,
       include: {
-        parentInfo: true, // 👈 include the parentInfo relation
+        parentInfo: true,
       },
     });
 
@@ -33,13 +33,14 @@ export async function POST(req: Request) {
   try {
     const formData: Student = await req.json();
 
-    const newStudent = (await prisma.student.create({
+    const newStudent = await prisma.student.create({
       data: {
         firstName: capitalizeFirstLetter(formData.firstName),
         lastName: capitalizeFirstLetter(formData.lastName),
         age: formData.age,
         grade: formData.grade,
         homeAddress: formData.homeAddress,
+        school: formData.school,
         parentInfo: {
           create: formData.parentInfo.map((parent) => ({
             ...parent,
@@ -48,7 +49,10 @@ export async function POST(req: Request) {
           })),
         },
       },
-    })) as StudentDto;
+      include: {
+        parentInfo: true,
+      },
+    });
 
     return NextResponse.json(
       {
@@ -57,11 +61,10 @@ export async function POST(req: Request) {
       },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch {
     return NextResponse.json(
       {
         message: "Failed to create student",
-        error: error.message || "Unknown error",
       },
       { status: 500 }
     );

@@ -31,6 +31,7 @@ export const initialStudentFormState: Student = {
   age: "",
   grade: "",
   homeAddress: "",
+  school: "",
   id: undefined,
   parentInfo: [
     {
@@ -133,6 +134,19 @@ export default function StudentForm() {
                 onChange={(e) =>
                   setForm(
                     updateFormField(form, "homeAddress", e.currentTarget.value)
+                  )
+                }
+                required
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="school">School</Label>
+              <Input
+                id="school"
+                placeholder="Enter school"
+                onChange={(e) =>
+                  setForm(
+                    updateFormField(form, "school", e.currentTarget.value)
                   )
                 }
                 required

@@ -15,6 +15,7 @@ export const BASE_URL =
     : "http://localhost:3000";
 
 export const STUDENTS_QUERY_KEY = "students";
+export const STUDENT_QUERY_KEY = "student";
 
 export const gradeOptions = [
   { label: "Kindergarten", value: "Kindergarten" },
