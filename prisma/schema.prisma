@@ -29,8 +29,8 @@ model ParentInfo {
   id         String   @id @default(cuid())
   parentName String
   relation   String
-  phone      Int
-  email      String
+  phone      String
+  email      String?
   Student    Student? @relation(fields: [studentId], references: [id])
   studentId  String?
 }

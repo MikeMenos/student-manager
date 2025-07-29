@@ -11,15 +11,18 @@ import { gradeOptions } from "@/lib/utils";
 export default function SelectGrade({
   onSelectGrade,
   hasAllGradesOption = true,
+  value,
 }: {
   onSelectGrade: (grade: string) => void;
   hasAllGradesOption?: boolean;
+  value?: string;
 }) {
   return (
     <Select
       defaultValue={hasAllGradesOption ? "all" : undefined}
       onValueChange={onSelectGrade as never}
       required
+      value={value}
     >
       <SelectTrigger>
         <SelectValue placeholder="Select grade" />

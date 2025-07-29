@@ -22,38 +22,49 @@ import { Textarea } from "./ui/textarea";
 import { useGetSingleStudent } from "@/hooks/use-student";
 import Loader from "./shared/loader";
 import Error from "./shared/error";
-import { StudentDto } from "@/types/student";
+import { Student } from "@/types/student";
+import StudentForm from "./forms/student-form";
+import { useState } from "react";
 
 export default function StudentDetails({ studentId }: { studentId: string }) {
+  const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
   const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
     useGetSingleStudent(studentId);
-  if (!singleStudent) return null;
   if (isSingleStudentLoading) return <Loader />;
-  if (isSingleStudentError) return <Error<StudentDto> />;
+  if (isSingleStudentError) return <Error<Student> />;
+  if (!singleStudent) return null;
 
   return (
     <div className="flex-1 overflow-auto">
       <div className="p-6">
-        <div className="flex items-center gap-4 mb-6">
-          <Avatar className="h-16 w-16">
-            <AvatarFallback className="text-lg">
-              {singleStudent.firstName.split("")[0]}
-              {singleStudent.lastName.split("")[0]}
-            </AvatarFallback>
-          </Avatar>
-          <div>
-            <h1 className="text-2xl font-bold">
-              {singleStudent.firstName} {singleStudent.lastName}
-            </h1>
-            <p className="text-muted-foreground">
-              {singleStudent.grade} • Age {singleStudent.age}
-            </p>
-            {/* <div className="flex items-center gap-2 mt-1">
+        <div className="flex items-center gap-4 mb-6 justify-between">
+          <div className="flex gap-4 items-center">
+            <Avatar className="h-16 w-16">
+              <AvatarFallback className="text-lg">
+                {singleStudent.firstName.split("")[0]}
+                {singleStudent.lastName.split("")[0]}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <h1 className="text-2xl font-bold">
+                {singleStudent.firstName} {singleStudent.lastName}
+              </h1>
+              <p className="text-muted-foreground">
+                {singleStudent.grade} • Age {singleStudent.age}
+              </p>
+              {/* <div className="flex items-center gap-2 mt-1">
               <span className="text-sm text-muted-foreground">
-                Attendance: {singleStudent.attendance}
+              Attendance: {singleStudent.attendance}
               </span>
-            </div> */}
+              </div> */}
+            </div>
           </div>
+          <StudentForm
+            isStudentFormOpen={isStudentFormOpen}
+            setIsStudentFormOpen={setIsStudentFormOpen}
+            selectedStudent={singleStudent}
+            key={singleStudent.id}
+          />
         </div>
         <Tabs defaultValue="parents" className="space-y-4">
           <TabsList>
@@ -64,8 +75,7 @@ export default function StudentDetails({ studentId }: { studentId: string }) {
             <TabsTrigger value="files">Files</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
           </TabsList>
-
-          {/* <TabsContent value="parents" className="space-y-4">
+          <TabsContent value="parents" className="space-y-4">
             <div className="grid gap-4">
               {singleStudent.parentInfo.map((parent, index) => (
                 <Card key={index}>
@@ -81,26 +91,18 @@ export default function StudentDetails({ studentId }: { studentId: string }) {
                         <Phone className="h-4 w-4 text-muted-foreground" />
                         <span className="text-sm">{parent.phone}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Mail className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">{parent.email}</span>
-                      </div>
-                      <div className="flex gap-2 mt-4">
-                        <Button size="sm" variant="outline">
-                          <Phone className="h-3 w-3 mr-1" />
-                          Call
-                        </Button>
-                        <Button size="sm" variant="outline">
-                          <Mail className="h-3 w-3 mr-1" />
-                          Email
-                        </Button>
-                      </div>
+                      {parent.email && (
+                        <div className="flex items-center gap-2">
+                          <Mail className="h-4 w-4 text-muted-foreground" />
+                          <span className="text-sm">{parent.email}</span>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               ))}
             </div>
-          </TabsContent> */}
+          </TabsContent>
           {/* <TabsContent value="notes" className="space-y-4">
             <Card>
               <CardHeader>

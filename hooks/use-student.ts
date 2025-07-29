@@ -47,22 +47,19 @@ export const useGetSingleStudent = (id: string) => {
   };
 };
 
-export const useCreateStudent = (
-  formData: Student,
-  setFormData: Dispatch<SetStateAction<Student>>,
-  setIsAddStudentOpen: Dispatch<SetStateAction<boolean>>
-) => {
+export const useCreateStudent = () => {
   const queryClient = useQueryClient();
 
   const { mutate: createStudentMutation, isPending: isCreateStudentLoading } =
     useMutation({
-      mutationFn: async () => await createStudent(formData),
+      mutationFn: async (formData: Student) => await createStudent(formData),
       onSuccess: (data) => {
         successToast(data.data.message);
-        setFormData(initialStudentFormState);
-        setIsAddStudentOpen(false);
         queryClient.invalidateQueries({
           queryKey: [STUDENTS_QUERY_KEY],
+        });
+        queryClient.invalidateQueries({
+          queryKey: [STUDENT_QUERY_KEY],
         });
       },
       onError: (error: AxiosError<{ message: string }>) => {

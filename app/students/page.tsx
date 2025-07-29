@@ -10,7 +10,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useGetAllStudents } from "@/hooks/use-student";
 import { gradeOptions } from "@/lib/utils";
-import { StudentDto } from "@/types/student";
+import { Student } from "@/types/student";
 import { Search } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import StudentForm from "../../components/forms/student-form";
@@ -19,6 +19,7 @@ import SelectGrade from "../../components/shared/select-grade";
 export default function StudentsPage() {
   const [selectedStudent, setSelectedStudent] = useState("");
   const [studentSearchInput, setStudentSearchInput] = useState("");
+  const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
   const [filter, setFilter] = useState("");
   const gradeValues = gradeOptions.map((g) => g.value);
   const isGradeFilter = filter === "all" || gradeValues.includes(filter);
@@ -56,13 +57,15 @@ export default function StudentsPage() {
               />
             </div>
           </div>
-          <StudentForm />
+          <StudentForm
+            isStudentFormOpen={isStudentFormOpen}
+            setIsStudentFormOpen={setIsStudentFormOpen}
+          />
         </div>
       </header>
 
       <main className="flex-1 overflow-hidden">
         <div className="grid h-full lg:grid-cols-[350px_1fr]">
-          {/* Student List */}
           <div className="border-r bg-muted/10">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
@@ -75,7 +78,7 @@ export default function StudentsPage() {
               {isAllStudentsLoading || isAllStudentsRefetching ? (
                 <Loader />
               ) : isAllStudentsError ? (
-                <Error<StudentDto[]> refetchData={refetchAllStudents} />
+                <Error<Student[]> refetchData={refetchAllStudents} />
               ) : allStudents && allStudents.length > 0 ? (
                 <div className="space-y-2">
                   {allStudents.map((student) => (
@@ -86,9 +89,9 @@ export default function StudentsPage() {
                           ? "ring-2 ring-blue-500"
                           : ""
                       }`}
-                      onClick={() => setSelectedStudent(student.id)}
+                      onClick={() => setSelectedStudent(student.id!)}
                     >
-                      <CardContent className="p-3">
+                      <CardContent className="p-3 relative">
                         <div className="flex items-center gap-3">
                           <Avatar className="h-10 w-10">
                             <AvatarFallback>
@@ -118,7 +121,7 @@ export default function StudentsPage() {
               )}
             </div>
           </div>
-          <StudentDetails studentId={selectedStudent} />
+          {selectedStudent && <StudentDetails studentId={selectedStudent} />}
         </div>
       </main>
     </>

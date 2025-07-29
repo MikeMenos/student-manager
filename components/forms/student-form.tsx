@@ -9,8 +9,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { Plus } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { Pencil, Plus } from "lucide-react";
+import {
+  Dispatch,
+  FormEvent,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -25,6 +32,12 @@ import { Student } from "@/types/student";
 import { updateFormField } from "@/lib/helpers";
 import { useCreateStudent } from "@/hooks/use-student";
 
+type StudentFormProps = {
+  isStudentFormOpen: boolean;
+  setIsStudentFormOpen: Dispatch<SetStateAction<boolean>>;
+  selectedStudent?: Student;
+};
+
 export const initialStudentFormState: Student = {
   firstName: "",
   lastName: "",
@@ -37,41 +50,57 @@ export const initialStudentFormState: Student = {
     {
       parentName: "",
       email: "",
-      phone: null,
+      phone: "",
       relation: "",
     },
   ],
 };
 
-export default function StudentForm() {
-  const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
+export default function StudentForm({
+  isStudentFormOpen,
+  setIsStudentFormOpen,
+  selectedStudent,
+}: StudentFormProps) {
   const [form, setForm] = useState<Student>(initialStudentFormState);
-  const { createStudentMutation, isCreateStudentLoading } = useCreateStudent(
-    form,
-    setForm,
-    setIsAddStudentOpen
-  );
+  const { createStudentMutation, isCreateStudentLoading } = useCreateStudent();
 
   const handleCreateStudent = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createStudentMutation();
+    createStudentMutation(form, { onSuccess: handleOnClose });
+  };
+
+  useEffect(() => {
+    if (selectedStudent && isStudentFormOpen) {
+      setForm(selectedStudent);
+    }
+  }, [selectedStudent, isStudentFormOpen]);
+
+  const handleOnClose = () => {
+    setIsStudentFormOpen(false);
+    setForm(initialStudentFormState);
   };
 
   return (
-    <Dialog open={isAddStudentOpen} onOpenChange={setIsAddStudentOpen}>
+    <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Add Student
+          {selectedStudent ? (
+            <Pencil className="h-4 w-4" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
+
+          {selectedStudent ? `Edit` : "Add Student"}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <form onSubmit={(e) => handleCreateStudent(e)}>
           <DialogHeader>
-            <DialogTitle>Register New Student</DialogTitle>
-            <DialogDescription>
-              Add a new student to the school management system.
-            </DialogDescription>
+            <DialogTitle className="mb-4">
+              {selectedStudent
+                ? `Edit ${selectedStudent.firstName} ${selectedStudent.lastName}`
+                : "Register new student"}
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
@@ -80,6 +109,7 @@ export default function StudentForm() {
                 <Input
                   id="firstName"
                   placeholder="Enter first name"
+                  value={form?.firstName}
                   onChange={(e) =>
                     setForm(
                       updateFormField(form, "firstName", e.currentTarget.value)
@@ -93,6 +123,7 @@ export default function StudentForm() {
                 <Input
                   id="lastName"
                   placeholder="Enter last name"
+                  value={form?.lastName}
                   onChange={(e) =>
                     setForm(
                       updateFormField(form, "lastName", e.currentTarget.value)
@@ -110,6 +141,7 @@ export default function StudentForm() {
                     setForm(updateFormField(form, "grade", grade))
                   }
                   hasAllGradesOption={false}
+                  value={form?.grade}
                 />
               </div>
               <div className="grid gap-2">
@@ -119,6 +151,7 @@ export default function StudentForm() {
                   min={0}
                   type="number"
                   placeholder="Enter age"
+                  value={form?.age}
                   onChange={(e) =>
                     setForm(updateFormField(form, "age", e.currentTarget.value))
                   }
@@ -131,6 +164,7 @@ export default function StudentForm() {
               <Input
                 id="homeAddress"
                 placeholder="Enter home address"
+                value={form?.homeAddress}
                 onChange={(e) =>
                   setForm(
                     updateFormField(form, "homeAddress", e.currentTarget.value)
@@ -144,6 +178,7 @@ export default function StudentForm() {
               <Input
                 id="school"
                 placeholder="Enter school"
+                value={form?.school}
                 onChange={(e) =>
                   setForm(
                     updateFormField(form, "school", e.currentTarget.value)
@@ -165,7 +200,7 @@ export default function StudentForm() {
                         {
                           parentName: "",
                           email: "",
-                          phone: null,
+                          phone: "",
                           relation: "",
                         },
                       ],
@@ -177,13 +212,14 @@ export default function StudentForm() {
               )}
             </div>
             {form.parentInfo.map((item, idx) => (
-              <>
+              <Fragment key={item.id}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="parentName">Parent Name</Label>
                     <Input
                       id="parentName"
                       placeholder="Enter parent name"
+                      value={item?.parentName}
                       onChange={(e) => {
                         setForm(
                           updateFormField(
@@ -199,6 +235,7 @@ export default function StudentForm() {
                   <div className="grid gap-2">
                     <Label htmlFor="relation">Relation</Label>
                     <Select
+                      value={item?.relation}
                       onValueChange={(value) => {
                         setForm(
                           updateFormField(
@@ -230,12 +267,13 @@ export default function StudentForm() {
                       type="number"
                       placeholder="Enter phone number"
                       min={0}
+                      value={item?.phone}
                       onChange={(e) => {
                         setForm(
                           updateFormField(
                             form,
                             `parentInfo[${idx}].phone`,
-                            Number(e.currentTarget.value)
+                            e.currentTarget.value
                           )
                         );
                       }}
@@ -248,6 +286,7 @@ export default function StudentForm() {
                       id="email"
                       type="email"
                       placeholder="Enter email address"
+                      value={item?.email}
                       onChange={(e) =>
                         setForm(
                           updateFormField(
@@ -257,25 +296,24 @@ export default function StudentForm() {
                           )
                         )
                       }
-                      required
                     />
                   </div>
                 </div>
                 <Separator />
-              </>
+              </Fragment>
             ))}
           </div>
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setIsAddStudentOpen(false)}
+              onClick={handleOnClose}
               disabled={isCreateStudentLoading}
               type="button"
             >
               Cancel
             </Button>
             <Button disabled={isCreateStudentLoading} type="submit">
-              Register Student
+              {selectedStudent ? "Save" : "Add"}
             </Button>
           </DialogFooter>
         </form>

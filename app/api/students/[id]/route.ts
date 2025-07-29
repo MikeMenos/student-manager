@@ -1,12 +1,16 @@
-// app/api/student/[id]/route.ts
+// app/api/students/[id]/route.ts
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const id = params.id;
+export async function GET(req: NextRequest) {
+  const id = req.nextUrl.pathname.split("/").pop(); // safely extract ID from the URL
+
+  if (!id) {
+    return NextResponse.json(
+      { message: "Missing student ID" },
+      { status: 400 }
+    );
+  }
 
   try {
     const student = await prisma.student.findUnique({
@@ -24,7 +28,8 @@ export async function GET(
     }
 
     return NextResponse.json({ student });
-  } catch {
+  } catch (error) {
+    console.error("GET /students/[id] error:", error);
     return NextResponse.json(
       { message: "Failed to fetch student" },
       { status: 500 }

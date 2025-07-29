@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Student, StudentDto } from "@/types/student";
+import { Student } from "@/types/student";
 import prisma from "@/lib/prisma";
 import { capitalizeFirstLetter } from "@/lib/helpers";
 
@@ -33,38 +33,75 @@ export async function POST(req: Request) {
   try {
     const formData: Student = await req.json();
 
-    const newStudent = await prisma.student.create({
-      data: {
-        firstName: capitalizeFirstLetter(formData.firstName),
-        lastName: capitalizeFirstLetter(formData.lastName),
-        age: formData.age,
-        grade: formData.grade,
-        homeAddress: formData.homeAddress,
-        school: formData.school,
-        parentInfo: {
-          create: formData.parentInfo.map((parent) => ({
-            ...parent,
-            phone: parent.phone!,
-            parentName: capitalizeFirstLetter(parent.parentName),
-          })),
+    const isUpdate = !!formData.id;
+
+    const data = {
+      firstName: capitalizeFirstLetter(formData.firstName),
+      lastName: capitalizeFirstLetter(formData.lastName),
+      age: formData.age,
+      grade: formData.grade,
+      homeAddress: formData.homeAddress,
+      school: formData.school,
+    };
+
+    let student;
+
+    if (isUpdate) {
+      // Delete existing parentInfo first to avoid duplicates
+      await prisma.parentInfo.deleteMany({
+        where: { studentId: formData.id },
+      });
+
+      student = await prisma.student.update({
+        where: { id: formData.id },
+        data: {
+          ...data,
+          parentInfo: {
+            create: formData.parentInfo.map(
+              ({ parentName, relation, phone, email }) => ({
+                parentName: capitalizeFirstLetter(parentName),
+                relation,
+                phone: phone,
+                email: email ?? undefined,
+              })
+            ),
+          },
         },
-      },
-      include: {
-        parentInfo: true,
-      },
-    });
+        include: { parentInfo: true },
+      });
+    } else {
+      student = await prisma.student.create({
+        data: {
+          ...data,
+          parentInfo: {
+            create: formData.parentInfo.map(
+              ({ parentName, relation, phone, email }) => ({
+                parentName: capitalizeFirstLetter(parentName),
+                relation,
+                phone: phone,
+                email: email ?? undefined,
+              })
+            ),
+          },
+        },
+        include: { parentInfo: true },
+      });
+    }
 
     return NextResponse.json(
       {
-        data: newStudent,
-        message: "Student created successfully",
+        data: student,
+        message: isUpdate
+          ? "Student updated successfully"
+          : "Student created successfully",
       },
-      { status: 201 }
+      { status: isUpdate ? 200 : 201 }
     );
-  } catch {
+  } catch (error) {
+    console.error("Student create/update error:", error);
     return NextResponse.json(
       {
-        message: "Failed to create student",
+        message: "Failed to process student",
       },
       { status: 500 }
     );
