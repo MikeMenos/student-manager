@@ -1,0 +1,69 @@
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { useDeleteStudent } from "@/hooks/use-student";
+import { Student } from "@/types/student";
+import { Button } from "./ui/button";
+import { Dispatch, SetStateAction, useState } from "react";
+
+export default function DeleteStudent({
+  singleStudent,
+  setSelectedStudent,
+}: {
+  singleStudent?: Student;
+  setSelectedStudent: Dispatch<SetStateAction<string>>;
+}) {
+  const [isStudentDeleteOpen, setIsStudentDeleteOpen] = useState(false);
+
+  const { deleteStudentMutation, isDeleteStudentLoading } = useDeleteStudent(
+    singleStudent?.id
+  );
+
+  if (!singleStudent) return null;
+
+  const handleOnCloseStudentDeleteDialog = () => {
+    setSelectedStudent("");
+    setIsStudentDeleteOpen(false);
+  };
+
+  return (
+    <Dialog open={isStudentDeleteOpen} onOpenChange={setIsStudentDeleteOpen}>
+      <DialogTrigger asChild>
+        <Button variant="destructive">Delete</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>
+            Delete {singleStudent.firstName} {singleStudent.lastName}
+          </DialogTitle>
+          <DialogDescription className="pt-3">
+            Are you sure you want to delete{" "}
+            <span className="font-bold text-lg">
+              {singleStudent.firstName} {singleStudent.lastName}
+            </span>
+            ? This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button
+            variant="destructive"
+            onClick={() =>
+              deleteStudentMutation(undefined, {
+                onSuccess: handleOnCloseStudentDeleteDialog,
+              })
+            }
+            disabled={isDeleteStudentLoading}
+          >
+            Yes, Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

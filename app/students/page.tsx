@@ -50,7 +50,7 @@ export default function StudentsPage() {
             <div className="relative max-w-md">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search students..."
+                placeholder="Search by name, grade, age, or parent..."
                 className="pl-8"
                 value={studentSearchInput}
                 onChange={handleSearchStudentInput}
@@ -121,7 +121,12 @@ export default function StudentsPage() {
               )}
             </div>
           </div>
-          {selectedStudent && <StudentDetails studentId={selectedStudent} />}
+          {selectedStudent && (
+            <StudentDetails
+              studentId={selectedStudent}
+              setSelectedStudent={setSelectedStudent}
+            />
+          )}
         </div>
       </main>
     </>

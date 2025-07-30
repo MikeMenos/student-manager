@@ -28,8 +28,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({ student });
-  } catch (error) {
-    console.error("GET /students/[id] error:", error);
+  } catch {
     return NextResponse.json(
       { message: "Failed to fetch student" },
       { status: 500 }

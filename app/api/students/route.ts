@@ -15,6 +15,17 @@ export async function GET(req: Request) {
               { firstName: { contains: filter, mode: "insensitive" } },
               { lastName: { contains: filter, mode: "insensitive" } },
               { grade: { contains: filter, mode: "insensitive" } },
+              { age: { contains: filter, mode: "insensitive" } },
+              {
+                parentInfo: {
+                  some: {
+                    OR: [
+                      { parentName: { contains: filter, mode: "insensitive" } },
+                      { email: { contains: filter, mode: "insensitive" } },
+                    ],
+                  },
+                },
+              },
             ],
           }
         : undefined,
@@ -103,6 +114,26 @@ export async function POST(req: Request) {
       {
         message: "Failed to process student",
       },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id")!;
+
+    await prisma.student.delete({
+      where: {
+        id,
+      },
+    });
+
+    return NextResponse.json({ message: "Student deleted" });
+  } catch {
+    return NextResponse.json(
+      { message: "Failed to delete student" },
       { status: 500 }
     );
   }

@@ -24,3 +24,9 @@ export async function createStudent(formData: Student) {
   };
   return response;
 }
+
+export async function deleteStudent(id: string) {
+  return await axios.delete(`${BASE_URL}/api/students`, {
+    params: { id },
+  });
+}

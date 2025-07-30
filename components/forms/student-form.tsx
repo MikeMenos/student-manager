@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -66,7 +65,7 @@ export default function StudentForm({
 
   const handleCreateStudent = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createStudentMutation(form, { onSuccess: handleOnClose });
+    createStudentMutation(form, { onSuccess: handleOnCloseStudentForm });
   };
 
   useEffect(() => {
@@ -75,7 +74,7 @@ export default function StudentForm({
     }
   }, [selectedStudent, isStudentFormOpen]);
 
-  const handleOnClose = () => {
+  const handleOnCloseStudentForm = () => {
     setIsStudentFormOpen(false);
     setForm(initialStudentFormState);
   };
@@ -306,7 +305,7 @@ export default function StudentForm({
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={handleOnClose}
+              onClick={handleOnCloseStudentForm}
               disabled={isCreateStudentLoading}
               type="button"
             >

@@ -1,7 +1,7 @@
-import { initialStudentFormState } from "@/components/forms/student-form";
 import { errorToast, successToast } from "@/components/shared/toasts";
 import {
   createStudent,
+  deleteStudent,
   getAllStudents,
   getSingleStudent,
 } from "@/lib/api/student/api";
@@ -9,7 +9,6 @@ import { STUDENT_QUERY_KEY, STUDENTS_QUERY_KEY } from "@/lib/utils";
 import { Student } from "@/types/student";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Dispatch, SetStateAction } from "react";
 
 export const useGetAllStudents = ({
   offset,
@@ -67,4 +66,21 @@ export const useCreateStudent = () => {
       },
     });
   return { createStudentMutation, isCreateStudentLoading };
+};
+
+export const useDeleteStudent = (id?: string) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteStudentMutation, isPending: isDeleteStudentLoading } =
+    useMutation({
+      mutationFn: async () => await deleteStudent(id!),
+      onSuccess: (data) => {
+        successToast(data.data.message);
+        queryClient.invalidateQueries({ queryKey: [STUDENTS_QUERY_KEY] });
+      },
+      onError: ({ message }: { message: string }) => {
+        errorToast(message);
+      },
+    });
+  return { deleteStudentMutation, isDeleteStudentLoading };
 };

@@ -24,9 +24,16 @@ import Loader from "./shared/loader";
 import Error from "./shared/error";
 import { Student } from "@/types/student";
 import StudentForm from "./forms/student-form";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import DeleteStudent from "./delete-student";
 
-export default function StudentDetails({ studentId }: { studentId: string }) {
+export default function StudentDetails({
+  studentId,
+  setSelectedStudent,
+}: {
+  studentId: string;
+  setSelectedStudent: Dispatch<SetStateAction<string>>;
+}) {
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
   const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
     useGetSingleStudent(studentId);
@@ -59,12 +66,18 @@ export default function StudentDetails({ studentId }: { studentId: string }) {
               </div> */}
             </div>
           </div>
-          <StudentForm
-            isStudentFormOpen={isStudentFormOpen}
-            setIsStudentFormOpen={setIsStudentFormOpen}
-            selectedStudent={singleStudent}
-            key={singleStudent.id}
-          />
+          <div className="flex items-center gap-2">
+            <StudentForm
+              isStudentFormOpen={isStudentFormOpen}
+              setIsStudentFormOpen={setIsStudentFormOpen}
+              selectedStudent={singleStudent}
+              key={singleStudent.id}
+            />
+            <DeleteStudent
+              singleStudent={singleStudent}
+              setSelectedStudent={setSelectedStudent}
+            />
+          </div>
         </div>
         <Tabs defaultValue="parents" className="space-y-4">
           <TabsList>
