@@ -14,5 +14,6 @@ export interface Student {
   grade: string;
   homeAddress: string;
   school: string;
+  center: string;
   parentInfo: ParentInfo[];
 }

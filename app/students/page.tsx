@@ -9,20 +9,27 @@ import { Input } from "@/components/ui/input";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useGetAllStudents } from "@/hooks/use-student";
-import { gradeOptions } from "@/lib/utils";
+import { centerOptions } from "@/lib/utils";
 import { Student } from "@/types/student";
-import { Search } from "lucide-react";
+import { Building, Search } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import StudentForm from "../../components/forms/student-form";
-import SelectGrade from "../../components/shared/select-grade";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import SelectCenter from "@/components/shared/select-center";
 
 export default function StudentsPage() {
   const [selectedStudent, setSelectedStudent] = useState("");
   const [studentSearchInput, setStudentSearchInput] = useState("");
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
   const [filter, setFilter] = useState("");
-  const gradeValues = gradeOptions.map((g) => g.value);
-  const isGradeFilter = filter === "all" || gradeValues.includes(filter);
+  const centerValues = centerOptions.map((g) => g.value);
+  const isGradeFilter = filter === "all" || centerValues.includes(filter);
   const debounceDelay = isGradeFilter ? 0 : 800;
 
   const debouncedFilter = useDebounce(filter, debounceDelay);
@@ -41,6 +48,7 @@ export default function StudentsPage() {
     setFilter(e.target.value);
     setStudentSearchInput(e.target.value);
   };
+
   return (
     <>
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-14">
@@ -73,7 +81,7 @@ export default function StudentsPage() {
                   Students{" "}
                   {allStudents?.length ? `(${allStudents?.length})` : ""}
                 </h2>
-                <SelectGrade onSelectGrade={(grade) => setFilter(grade)} />
+                <SelectCenter onSelectCenter={(center) => setFilter(center)} />
               </div>
               {isAllStudentsLoading || isAllStudentsRefetching ? (
                 <Loader />
@@ -108,6 +116,10 @@ export default function StudentsPage() {
                             <p className="text-sm text-muted-foreground">
                               {student.grade} • Age {student.age}
                             </p>
+                            <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
+                              <Building size={15} />
+                              {student.center}
+                            </div>
                           </div>
                         </div>
                       </CardContent>

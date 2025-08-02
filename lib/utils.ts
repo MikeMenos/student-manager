@@ -26,3 +26,9 @@ export const gradeOptions = [
   { label: "5th Grade", value: "5th Grade" },
   { label: "6th Grade", value: "6th Grade" },
 ];
+
+export const centerOptions = [
+  { label: "Patras", value: "Patras" },
+  { label: "Amaliada", value: "Amaliada" },
+  { label: "Aigio", value: "Aigio" },
+];

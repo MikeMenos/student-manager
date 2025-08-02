@@ -16,6 +16,7 @@ export async function GET(req: Request) {
               { lastName: { contains: filter, mode: "insensitive" } },
               { grade: { contains: filter, mode: "insensitive" } },
               { age: { contains: filter, mode: "insensitive" } },
+              { center: { contains: filter, mode: "insensitive" } },
               {
                 parentInfo: {
                   some: {
@@ -53,6 +54,7 @@ export async function POST(req: Request) {
       grade: formData.grade,
       homeAddress: formData.homeAddress,
       school: formData.school,
+      center: formData.center,
     };
 
     let student;

@@ -30,6 +30,7 @@ import SelectGrade from "../shared/select-grade";
 import { Student } from "@/types/student";
 import { updateFormField } from "@/lib/helpers";
 import { useCreateStudent } from "@/hooks/use-student";
+import SelectCenter from "../shared/select-center";
 
 type StudentFormProps = {
   isStudentFormOpen: boolean;
@@ -38,13 +39,14 @@ type StudentFormProps = {
 };
 
 export const initialStudentFormState: Student = {
+  id: undefined,
   firstName: "",
   lastName: "",
   age: "",
   grade: "",
   homeAddress: "",
   school: "",
-  id: undefined,
+  center: "",
   parentInfo: [
     {
       parentName: "",
@@ -159,6 +161,20 @@ export default function StudentForm({
               </div>
             </div>
             <div className="grid gap-2">
+              <Label htmlFor="school">School</Label>
+              <Input
+                id="school"
+                placeholder="Enter school"
+                value={form?.school}
+                onChange={(e) =>
+                  setForm(
+                    updateFormField(form, "school", e.currentTarget.value)
+                  )
+                }
+                required
+              />
+            </div>
+            <div className="grid gap-2">
               <Label htmlFor="homeAddress">Address</Label>
               <Input
                 id="homeAddress"
@@ -172,18 +188,14 @@ export default function StudentForm({
                 required
               />
             </div>
+
             <div className="grid gap-2">
-              <Label htmlFor="school">School</Label>
-              <Input
-                id="school"
-                placeholder="Enter school"
-                value={form?.school}
-                onChange={(e) =>
-                  setForm(
-                    updateFormField(form, "school", e.currentTarget.value)
-                  )
+              <Label htmlFor="relation">Center</Label>
+              <SelectCenter
+                onSelectCenter={(center) =>
+                  setForm(updateFormField(form, "center", center))
                 }
-                required
+                hasAllCenterOption={false}
               />
             </div>
             <Separator />

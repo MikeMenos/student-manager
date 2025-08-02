@@ -7,7 +7,7 @@ import {
   Plus,
   Search,
   Clock,
-  MapPin,
+  Building,
   GraduationCap,
   Edit,
   Trash2,
@@ -456,7 +456,7 @@ export default function ClassesPage() {
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
-                      <MapPin className="h-3 w-3 text-muted-foreground" />
+                      <Building className="h-3 w-3 text-muted-foreground" />
                       <span>{classItem.room}</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">

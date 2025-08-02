@@ -22,6 +22,7 @@ model Student {
   grade       String
   homeAddress String
   school      String
+  center      String
   parentInfo  ParentInfo[]
 }
 
