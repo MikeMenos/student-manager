@@ -8,7 +8,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { useDeleteStudent } from "@/hooks/use-student";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 import { Button } from "./ui/button";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -16,7 +16,7 @@ export default function DeleteStudent({
   singleStudent,
   setSelectedStudent,
 }: {
-  singleStudent?: Student;
+  singleStudent?: StudentT;
   setSelectedStudent: Dispatch<SetStateAction<string>>;
 }) {
   const [isStudentDeleteOpen, setIsStudentDeleteOpen] = useState(false);

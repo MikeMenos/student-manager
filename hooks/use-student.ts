@@ -6,7 +6,7 @@ import {
   getSingleStudent,
 } from "@/lib/api/student/api";
 import { STUDENT_QUERY_KEY, STUDENTS_QUERY_KEY } from "@/lib/utils";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
@@ -51,7 +51,7 @@ export const useCreateStudent = () => {
 
   const { mutate: createStudentMutation, isPending: isCreateStudentLoading } =
     useMutation({
-      mutationFn: async (formData: Student) => await createStudent(formData),
+      mutationFn: async (formData: StudentT) => await createStudent(formData),
       onSuccess: (data) => {
         successToast(data.data.message);
         queryClient.invalidateQueries({

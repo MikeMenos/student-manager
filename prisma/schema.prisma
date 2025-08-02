@@ -14,6 +14,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum SessionType {
+  SPEECH
+  OCCUPATIONAL
+  PSYCHOLOGICAL
+  BEHAVIORAL
+}
+
 model Student {
   id          String       @id @default(uuid())
   firstName   String
@@ -24,6 +31,7 @@ model Student {
   school      String
   center      String
   parentInfo  ParentInfo[]
+  attendances Attendance[]
 }
 
 model ParentInfo {
@@ -34,4 +42,17 @@ model ParentInfo {
   email      String?
   Student    Student? @relation(fields: [studentId], references: [id])
   studentId  String?
+}
+
+model Attendance {
+  id              String      @id @default(uuid())
+  date            DateTime
+  studentId       String
+  therapistId     String
+  sessionType     SessionType
+  sessionDuration Int
+  student         Student     @relation(fields: [studentId], references: [id])
+
+  @@index([studentId, date])
+  @@index([therapistId])
 }

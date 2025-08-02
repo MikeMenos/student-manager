@@ -1,5 +1,5 @@
 import { useGetSingleStudent } from "@/hooks/use-student";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 import { Building } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { AttendanceContent } from "./attendance-content";
@@ -22,7 +22,7 @@ export default function StudentDetails({
   const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
     useGetSingleStudent(studentId);
   if (isSingleStudentLoading) return <Loader />;
-  if (isSingleStudentError) return <Error<Student> />;
+  if (isSingleStudentError) return <Error<StudentT> />;
   if (!singleStudent) return null;
 
   return (

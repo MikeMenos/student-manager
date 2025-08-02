@@ -26,7 +26,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { students } from "@/lib/mock-students-data";
 
-interface Student {
+interface StudentT {
   id: number;
   name: string;
   grade: string;

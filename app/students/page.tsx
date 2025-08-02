@@ -10,7 +10,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useGetAllStudents } from "@/hooks/use-student";
 import { centerOptions } from "@/lib/utils";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 import { Building, Search } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import StudentForm from "../../components/forms/student-form";
@@ -86,7 +86,7 @@ export default function StudentsPage() {
               {isAllStudentsLoading || isAllStudentsRefetching ? (
                 <Loader />
               ) : isAllStudentsError ? (
-                <Error<Student[]> refetchData={refetchAllStudents} />
+                <Error<StudentT[]> refetchData={refetchAllStudents} />
               ) : allStudents && allStudents.length > 0 ? (
                 <div className="space-y-2">
                   {allStudents.map((student) => (

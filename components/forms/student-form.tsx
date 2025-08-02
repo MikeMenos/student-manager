@@ -27,7 +27,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SelectGrade from "../shared/select-grade";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 import { updateFormField } from "@/lib/helpers";
 import { useCreateStudent } from "@/hooks/use-student";
 import SelectCenter from "../shared/select-center";
@@ -35,10 +35,10 @@ import SelectCenter from "../shared/select-center";
 type StudentFormProps = {
   isStudentFormOpen: boolean;
   setIsStudentFormOpen: Dispatch<SetStateAction<boolean>>;
-  selectedStudent?: Student;
+  selectedStudent?: StudentT;
 };
 
-export const initialStudentFormState: Student = {
+export const initialStudentFormState: StudentT = {
   id: undefined,
   firstName: "",
   lastName: "",
@@ -62,7 +62,7 @@ export default function StudentForm({
   setIsStudentFormOpen,
   selectedStudent,
 }: StudentFormProps) {
-  const [form, setForm] = useState<Student>(initialStudentFormState);
+  const [form, setForm] = useState<StudentT>(initialStudentFormState);
   const { createStudentMutation, isCreateStudentLoading } = useCreateStudent();
 
   const handleCreateStudent = (e: FormEvent<HTMLFormElement>) => {

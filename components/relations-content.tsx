@@ -1,12 +1,12 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Mail, Phone, Users } from "lucide-react";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 
 export default function RelationsContent({
   singleStudent,
 }: {
-  singleStudent: Student;
+  singleStudent: StudentT;
 }) {
   return (
     <div className="grid gap-4">

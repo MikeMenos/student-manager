@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
 
     if (!student) {
       return NextResponse.json(
-        { message: "Student not found" },
+        { message: "StudentT not found" },
         { status: 404 }
       );
     }

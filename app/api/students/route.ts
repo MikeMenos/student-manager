@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Student } from "@/types/student";
+import { StudentT } from "@/types/student.type";
 import prisma from "@/lib/prisma";
 import { capitalizeFirstLetter } from "@/lib/helpers";
 
@@ -43,7 +43,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const formData: Student = await req.json();
+    const formData: StudentT = await req.json();
 
     const isUpdate = !!formData.id;
 
@@ -105,13 +105,13 @@ export async function POST(req: Request) {
       {
         data: student,
         message: isUpdate
-          ? "Student updated successfully"
-          : "Student created successfully",
+          ? "StudentT updated successfully"
+          : "StudentT created successfully",
       },
       { status: isUpdate ? 200 : 201 }
     );
   } catch (error) {
-    console.error("Student create/update error:", error);
+    console.error("StudentT create/update error:", error);
     return NextResponse.json(
       {
         message: "Failed to process student",
@@ -132,7 +132,7 @@ export async function DELETE(req: Request) {
       },
     });
 
-    return NextResponse.json({ message: "Student deleted" });
+    return NextResponse.json({ message: "StudentT deleted" });
   } catch {
     return NextResponse.json(
       { message: "Failed to delete student" },
