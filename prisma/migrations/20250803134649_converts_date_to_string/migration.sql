@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "public"."Attendance" ALTER COLUMN "date" SET DATA TYPE TEXT;

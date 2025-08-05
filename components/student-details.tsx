@@ -25,6 +25,7 @@ export default function StudentDetails({
   if (isSingleStudentError) return <Error<StudentT> />;
   if (!singleStudent) return null;
 
+  console.log(singleStudent);
   return (
     <div className="flex-1 overflow-auto">
       <div className="p-6">
@@ -75,6 +76,7 @@ export default function StudentDetails({
           <TabsContent value="attendance" className="space-y-4">
             <AttendanceContent
               studentName={`${singleStudent.firstName} ${singleStudent.lastName}`}
+              studentId={studentId}
             />
           </TabsContent>
         </Tabs>

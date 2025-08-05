@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
       where: { id },
       include: {
         parentInfo: true,
+        attendances: true,
       },
     });
 

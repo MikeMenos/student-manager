@@ -70,16 +70,16 @@ export default function StudentForm({
     createStudentMutation(form, { onSuccess: handleOnCloseStudentForm });
   };
 
+  const handleOnCloseStudentForm = () => {
+    setIsStudentFormOpen(false);
+    setForm(initialStudentFormState);
+  };
+
   useEffect(() => {
     if (selectedStudent && isStudentFormOpen) {
       setForm(selectedStudent);
     }
   }, [selectedStudent, isStudentFormOpen]);
-
-  const handleOnCloseStudentForm = () => {
-    setIsStudentFormOpen(false);
-    setForm(initialStudentFormState);
-  };
 
   return (
     <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>

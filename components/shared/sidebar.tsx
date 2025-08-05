@@ -16,6 +16,7 @@ import {
 import { BookOpen, GraduationCap, Settings, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useUser } from "@clerk/nextjs";
 
 const menuItems = [
   { title: "Classes", icon: BookOpen, url: "/" },
@@ -26,6 +27,9 @@ const menuItems = [
 export default function Sidebar() {
   const { open } = useSidebar();
   const pathname = usePathname();
+  const { isSignedIn } = useUser();
+
+  if (!isSignedIn) return null;
 
   return (
     <SidebarShadcn collapsible="icon">

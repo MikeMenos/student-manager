@@ -2,8 +2,11 @@ import { NextResponse } from "next/server";
 import { StudentT } from "@/types/student.type";
 import prisma from "@/lib/prisma";
 import { capitalizeFirstLetter } from "@/lib/helpers";
+import { auth } from "@clerk/nextjs/server";
 
 export async function GET(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
   const { searchParams } = new URL(req.url);
   const filter = searchParams.get("filter");
 
@@ -32,6 +35,7 @@ export async function GET(req: Request) {
         : undefined,
       include: {
         parentInfo: true,
+        attendances: true,
       },
     });
 
@@ -42,6 +46,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const formData: StudentT = await req.json();
 
@@ -105,23 +111,23 @@ export async function POST(req: Request) {
       {
         data: student,
         message: isUpdate
-          ? "StudentT updated successfully"
-          : "StudentT created successfully",
+          ? "Student updated successfully"
+          : "Student created successfully",
       },
       { status: isUpdate ? 200 : 201 }
     );
   } catch (error) {
     console.error("StudentT create/update error:", error);
     return NextResponse.json(
-      {
-        message: "Failed to process student",
-      },
+      { message: "Failed to process student" },
       { status: 500 }
     );
   }
 }
 
 export async function DELETE(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id")!;

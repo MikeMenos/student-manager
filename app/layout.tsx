@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Providers } from "./providers";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,25 +32,27 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>
-          <Sidebar />
-          <Providers>
-            <SidebarInset>{children}</SidebarInset>
-          </Providers>
-          <Toaster
-            toastOptions={{
-              success: {
-                duration: 3000,
-                style: { padding: "1rem" },
-              },
-              error: {
-                duration: 3000,
-                style: { padding: "1rem" },
-              },
-              position: "bottom-center",
-            }}
-          />
-        </SidebarProvider>
+        <ClerkProvider>
+          <SidebarProvider>
+            <Sidebar />
+            <Providers>
+              <SidebarInset>{children}</SidebarInset>
+            </Providers>
+            <Toaster
+              toastOptions={{
+                success: {
+                  duration: 3000,
+                  style: { padding: "1rem" },
+                },
+                error: {
+                  duration: 3000,
+                  style: { padding: "1rem" },
+                },
+                position: "bottom-center",
+              }}
+            />
+          </SidebarProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

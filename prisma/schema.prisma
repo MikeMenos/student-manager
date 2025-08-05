@@ -15,10 +15,10 @@ datasource db {
 }
 
 enum SessionType {
-  SPEECH
-  OCCUPATIONAL
-  PSYCHOLOGICAL
-  BEHAVIORAL
+  Speech
+  Occupational
+  Psychological
+  Behavioral
 }
 
 model Student {
@@ -46,7 +46,7 @@ model ParentInfo {
 
 model Attendance {
   id              String      @id @default(uuid())
-  date            DateTime
+  date            String
   studentId       String
   therapistId     String
   sessionType     SessionType

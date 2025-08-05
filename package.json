@@ -12,6 +12,7 @@
     "schema": "prisma/schema.prisma"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.28.1",
     "@prisma/client": "^6.13.0",
     "@prisma/extension-accelerate": "^2.0.2",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -33,6 +34,7 @@
     "lucide-react": "^0.525.0",
     "next": "15.4.2",
     "react": "19.1.0",
+    "react-awesome-reveal": "^4.3.1",
     "react-day-picker": "^9.8.1",
     "react-dom": "19.1.0",
     "react-hot-toast": "^2.5.2",
