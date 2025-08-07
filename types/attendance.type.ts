@@ -2,7 +2,8 @@ export type SessionType =
   | "Psychological"
   | "Occupational"
   | "Speech"
-  | "Behavioral";
+  | "Behavioral"
+  | undefined;
 
 export type AttendanceT = {
   id?: string;

@@ -17,9 +17,11 @@ import { BookOpen, GraduationCap, Settings, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useUser } from "@clerk/nextjs";
+import Link from "next/link";
 
 const menuItems = [
   { title: "Classes", icon: BookOpen, url: "/" },
+  { title: "Therapists", icon: BookOpen, url: "/therapists" },
   { title: "Students", icon: Users, url: "/students" },
   { title: "Settings", icon: Settings, url: "#" },
 ];
@@ -50,10 +52,10 @@ export default function Sidebar() {
               {menuItems.map((item, idx) => (
                 <SidebarMenuItem key={idx}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

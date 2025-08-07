@@ -26,11 +26,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import SelectGrade from "../shared/select-grade";
+import SelectGrade from "../selectors/select-grade";
 import { StudentT } from "@/types/student.type";
 import { updateFormField } from "@/lib/helpers";
 import { useCreateStudent } from "@/hooks/use-student";
-import SelectCenter from "../shared/select-center";
+import SelectCenter from "../selectors/select-center";
+import SelectTherapist from "../selectors/select-therapist";
+import { Option } from "../ui/multi-select";
+import { useUser } from "@clerk/nextjs";
 
 type StudentFormProps = {
   isStudentFormOpen: boolean;
@@ -55,6 +58,7 @@ export const initialStudentFormState: StudentT = {
       relation: "",
     },
   ],
+  therapists: [],
 };
 
 export default function StudentForm({
@@ -63,6 +67,9 @@ export default function StudentForm({
   selectedStudent,
 }: StudentFormProps) {
   const [form, setForm] = useState<StudentT>(initialStudentFormState);
+  const [selected, setSelected] = useState<Option[]>([]);
+  const { user } = useUser();
+
   const { createStudentMutation, isCreateStudentLoading } = useCreateStudent();
 
   const handleCreateStudent = (e: FormEvent<HTMLFormElement>) => {
@@ -81,6 +88,35 @@ export default function StudentForm({
     }
   }, [selectedStudent, isStudentFormOpen]);
 
+  useEffect(() => {
+    if (form.therapists && form.therapists.length > 0) {
+      setSelected(
+        form.therapists.map((therapist) => ({
+          label: `${therapist.therapistName} (${therapist.therapistRole})`,
+          value: therapist.id,
+        }))
+      );
+    }
+  }, [form.therapists]);
+
+  const therapistsFromDb = [
+    { id: "uuid-1", therapistName: "Dr. Smith" },
+    { id: "uuid-2", therapistName: "Dr. Lopez" },
+    { id: "uuid-3", therapistName: "Dr. Johnson" },
+  ];
+
+  // const therapistOptions: Option[] = form.therapists?.length
+  //   ? form?.therapists.map((t) => ({
+  //       label: t.therapistName,
+  //       value: t.id,
+  //     }))
+  //   : [];
+
+  const therapistOptions: Option[] = therapistsFromDb.map((t) => ({
+    label: t.therapistName,
+    value: t.therapistName,
+  }));
+
   return (
     <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
       <DialogTrigger asChild>
@@ -91,7 +127,7 @@ export default function StudentForm({
             <Plus className="h-4 w-4" />
           )}
 
-          {selectedStudent ? `Edit` : "Add Student"}
+          {selectedStudent ? `Edit` : "Add Students"}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
@@ -188,15 +224,33 @@ export default function StudentForm({
                 required
               />
             </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="relation">Center</Label>
-              <SelectCenter
-                onSelectCenter={(center) =>
-                  setForm(updateFormField(form, "center", center))
-                }
-                hasAllCenterOption={false}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="relation">Center</Label>
+                <SelectCenter
+                  onSelectCenter={(center) =>
+                    setForm(updateFormField(form, "center", center))
+                  }
+                  hasAllCenterOption={false}
+                  value={form.center}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="relation">Therapists</Label>
+                <SelectTherapist
+                  onTherapistSelect={(therapist) =>
+                    setForm(
+                      updateFormField(form, "therapists", {
+                        id: user!.id,
+                        therapistRole: therapist[0].value,
+                        therapistname: user?.username,
+                      })
+                    )
+                  }
+                  value={selected}
+                  options={therapistOptions}
+                />
+              </div>
             </div>
             <Separator />
             <div className="flex items-center justify-between">
@@ -223,7 +277,7 @@ export default function StudentForm({
               )}
             </div>
             {form.parentInfo.map((item, idx) => (
-              <Fragment key={item.id}>
+              <Fragment key={idx}>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="grid gap-2">
                     <Label htmlFor="parentName">Parent Name</Label>

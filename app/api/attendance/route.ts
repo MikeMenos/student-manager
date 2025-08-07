@@ -12,7 +12,7 @@ export async function POST(req: Request) {
 
     const attendance = await prisma.attendance.create({
       data: {
-        date: formData.sessionDate as string,
+        sessionDate: formData.sessionDate as string,
         studentId: formData.studentId!,
         therapistId: formData.therapistId!,
         sessionType: formData.sessionType,

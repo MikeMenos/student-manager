@@ -6,11 +6,11 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "../ui/dialog";
 import { useDeleteStudent } from "@/hooks/use-student";
 import { StudentT } from "@/types/student.type";
-import { Button } from "./ui/button";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Button } from "../ui/button";
 
 export default function DeleteStudent({
   singleStudent,

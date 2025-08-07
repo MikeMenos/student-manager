@@ -31,10 +31,10 @@ export const useGetAllStudents = ({
   };
 };
 
-export const useGetSingleStudent = (id: string) => {
+export const useGetSingleStudent = (id: string, date: Date | undefined) => {
   const { data, isLoading, isError, refetch, isRefetching } = useQuery({
-    queryKey: [STUDENT_QUERY_KEY, id],
-    queryFn: () => getSingleStudent(id),
+    queryKey: [STUDENT_QUERY_KEY, id, date],
+    queryFn: () => getSingleStudent(id, date),
   });
 
   return {

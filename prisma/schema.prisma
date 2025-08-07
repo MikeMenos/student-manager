@@ -32,27 +32,40 @@ model Student {
   center      String
   parentInfo  ParentInfo[]
   attendances Attendance[]
+  therapists  Therapist[]  @relation("StudentTherapists")
 }
 
-model ParentInfo {
-  id         String   @id @default(cuid())
-  parentName String
-  relation   String
-  phone      String
-  email      String?
-  Student    Student? @relation(fields: [studentId], references: [id])
-  studentId  String?
+model Therapist {
+  id            String       @id @default(uuid())
+  therapistRole SessionType
+  therapistName String
+  students      Student[]    @relation("StudentTherapists")
+  attendances   Attendance[]
 }
 
 model Attendance {
   id              String      @id @default(uuid())
-  date            String
-  studentId       String
-  therapistId     String
+  sessionDate     String
   sessionType     SessionType
   sessionDuration Int
-  student         Student     @relation(fields: [studentId], references: [id])
 
-  @@index([studentId, date])
+  studentId   String
+  therapistId String
+
+  student   Student   @relation(fields: [studentId], references: [id])
+  therapist Therapist @relation(fields: [therapistId], references: [id])
+
+  @@index([studentId, sessionDate])
   @@index([therapistId])
+}
+
+model ParentInfo {
+  id         String  @id @default(cuid())
+  parentName String
+  relation   String
+  phone      String
+  email      String?
+
+  studentId String
+  Student   Student @relation(fields: [studentId], references: [id])
 }

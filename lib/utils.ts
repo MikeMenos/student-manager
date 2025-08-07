@@ -1,3 +1,4 @@
+import { SessionType } from "@/types/attendance.type";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -13,6 +14,8 @@ export const BASE_URL =
     : process.env.NEXT_PUBLIC_RAILWAY_ENVIRONMENT_NAME === "development"
     ? DEV_URL
     : "http://localhost:3000";
+export const SIGN_UP_PATH = "/sign-up";
+export const SIGN_IN_PATH = "/sign-in";
 
 export const STUDENTS_QUERY_KEY = "students";
 export const STUDENT_QUERY_KEY = "student";
@@ -31,4 +34,11 @@ export const centerOptions = [
   { label: "Patras", value: "Patras" },
   { label: "Amaliada", value: "Amaliada" },
   { label: "Aigio", value: "Aigio" },
+];
+
+export const sessionTypeOptions = [
+  { label: "Occupational", value: "Occupational" },
+  { label: "Speech", value: "Speech" },
+  { label: "Psychological", value: "Psychological" },
+  { label: "Behavioral", value: "Behavioral" },
 ];

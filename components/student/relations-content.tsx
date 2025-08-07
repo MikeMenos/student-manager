@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Mail, Phone, Users } from "lucide-react";
 import { StudentT } from "@/types/student.type";
 

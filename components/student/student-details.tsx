@@ -2,14 +2,14 @@ import { useGetSingleStudent } from "@/hooks/use-student";
 import { StudentT } from "@/types/student.type";
 import { Building } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { AttendanceContent } from "./attendance-content";
+import { AttendanceContent } from "./attendance/attendance-card";
 import DeleteStudent from "./delete-student";
-import StudentForm from "./forms/student-form";
+import StudentForm from "../forms/student-form";
+import Error from "../shared/error";
+import Loader from "../shared/loader";
+import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import RelationsContent from "./relations-content";
-import Error from "./shared/error";
-import Loader from "./shared/loader";
-import { Avatar, AvatarFallback } from "./ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export default function StudentDetails({
   studentId,
@@ -20,12 +20,11 @@ export default function StudentDetails({
 }) {
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
   const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
-    useGetSingleStudent(studentId);
+    useGetSingleStudent(studentId, undefined);
   if (isSingleStudentLoading) return <Loader />;
   if (isSingleStudentError) return <Error<StudentT> />;
   if (!singleStudent) return null;
 
-  console.log(singleStudent);
   return (
     <div className="flex-1 overflow-auto">
       <div className="p-6">

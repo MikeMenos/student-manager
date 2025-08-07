@@ -1,3 +1,4 @@
+import { formatToDDMMYYYY } from "@/lib/helpers";
 import { BASE_URL } from "@/lib/utils";
 import { StudentT } from "@/types/student.type";
 import axios from "axios";
@@ -11,8 +12,10 @@ export async function getAllStudents(filter: string) {
   return data;
 }
 
-export async function getSingleStudent(id: string) {
-  const response = await axios.get(`${BASE_URL}/api/students/${id}`);
+export async function getSingleStudent(id: string, date: Date | undefined) {
+  const response = await axios.get(`${BASE_URL}/api/students/${id}`, {
+    params: date ? { sessionDate: formatToDDMMYYYY(date) } : {},
+  });
   const data = response.data.student as StudentT;
 
   return data;

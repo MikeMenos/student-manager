@@ -1,23 +1,23 @@
 // app/api/students/[id]/route.ts
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-  const id = req.nextUrl.pathname.split("/").pop(); // safely extract ID from the URL
+  const { userId } = await auth();
+  if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  if (!id) {
-    return NextResponse.json(
-      { message: "Missing student ID" },
-      { status: 400 }
-    );
-  }
-
+  const id = req.nextUrl.pathname.split("/").pop();
+  const { searchParams } = new URL(req.url);
+  const sessionDate = searchParams.get("sessionDate");
   try {
     const student = await prisma.student.findUnique({
       where: { id },
       include: {
         parentInfo: true,
-        attendances: true,
+        attendances: {
+          where: sessionDate ? { sessionDate } : undefined,
+        },
       },
     });
 

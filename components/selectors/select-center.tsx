@@ -11,15 +11,18 @@ import { centerOptions } from "@/lib/utils";
 export default function SelectCenter({
   onSelectCenter,
   hasAllCenterOption = true,
+  value,
 }: {
   onSelectCenter: (grade: string) => void;
   hasAllCenterOption?: boolean;
+  value?: string;
 }) {
   return (
     <Select
       defaultValue={hasAllCenterOption ? "all" : undefined}
       onValueChange={onSelectCenter as never}
       required
+      value={value}
     >
       <SelectTrigger>
         <SelectValue placeholder="Select center" />
