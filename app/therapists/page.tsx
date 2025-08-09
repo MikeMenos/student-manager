@@ -1,6 +1,6 @@
 "use client";
 import AddTherapist from "@/components/add-therapist";
-import SelectSessionType from "@/components/selectors/select-session-type";
+import SelectTherapistRole from "@/components/selectors/select-session-type";
 import { DataTable } from "@/components/shared/data-table";
 import Error from "@/components/shared/error";
 import Loader from "@/components/shared/loader";
@@ -24,7 +24,7 @@ import { getUsersColumns } from "./get-user-columns";
 
 export default function Users() {
   const [userSearchInput, setUserSearchInput] = useState("");
-  const [therapistRole, setTherapistRole] = useState<SessionType>(undefined);
+  const [therapistRole, setTherapistRole] = useState<SessionType>();
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
 
   const { state } = useSidebar();
@@ -81,8 +81,8 @@ export default function Users() {
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <SelectSessionType
-                onSelectSessionType={(sessionType) =>
+              <SelectTherapistRole
+                onSelectTherapistRole={(sessionType) =>
                   setTherapistRole(sessionType)
                 }
               />

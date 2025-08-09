@@ -9,14 +9,14 @@ import { useState } from "react";
 export default function AddTherapist({
   therapistRole,
 }: {
-  therapistRole: SessionType;
+  therapistRole?: SessionType;
 }) {
   const [userEmail, setUserEmail] = useState("");
 
   const { addTherapistMutation, isAddTherapistLoading } = useInviteTherapist(
     userEmail,
     setUserEmail,
-    therapistRole
+    therapistRole!
   );
   return (
     <>

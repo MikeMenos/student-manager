@@ -9,16 +9,20 @@ import {
 import { sessionTypeOptions } from "@/lib/utils";
 import { SessionType } from "@/types/attendance.type";
 
-export default function SelectSessionType({
-  onSelectSessionType,
+export default function SelectTherapistRole({
+  onSelectTherapistRole,
   value,
 }: {
-  onSelectSessionType: (sessionType: SessionType) => void;
+  onSelectTherapistRole: (sessionType: SessionType) => void;
   hasAllGradesOption?: boolean;
   value?: string;
 }) {
   return (
-    <Select onValueChange={onSelectSessionType as never} required value={value}>
+    <Select
+      onValueChange={onSelectTherapistRole as never}
+      required
+      value={value}
+    >
       <SelectTrigger>
         <SelectValue placeholder="Select therapist role" />
       </SelectTrigger>
