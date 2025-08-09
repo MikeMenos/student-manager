@@ -1,4 +1,5 @@
-import { AttendanceT, SessionType } from "./attendance.type";
+import { AttendanceT } from "./attendance.type";
+import { TherapistT } from "./therapistType";
 
 export type ParentInfoT = {
   id?: string;
@@ -20,12 +21,4 @@ export type StudentT = {
   attendances?: AttendanceT[];
   parentInfo: ParentInfoT[];
   therapists?: TherapistT[];
-};
-
-export type TherapistT = {
-  id: string;
-  therapistRole: SessionType;
-  therapistName: string;
-  students?: StudentT[];
-  attendances?: AttendanceT[];
 };

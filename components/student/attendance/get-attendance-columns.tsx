@@ -29,7 +29,6 @@ export const getAttendanceColumns = (): ColumnDef<AttendanceT>[] => [
     id: "actions",
     cell: ({ row }) => {
       const rowData = row.original;
-      console.log(rowData);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

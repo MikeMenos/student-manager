@@ -34,6 +34,7 @@ import SelectCenter from "../selectors/select-center";
 import SelectTherapist from "../selectors/select-therapist";
 import { Option } from "../ui/multi-select";
 import { useUser } from "@clerk/nextjs";
+import { useGetAllTherapists } from "@/hooks/use-therapists";
 
 type StudentFormProps = {
   isStudentFormOpen: boolean;
@@ -68,9 +69,11 @@ export default function StudentForm({
 }: StudentFormProps) {
   const [form, setForm] = useState<StudentT>(initialStudentFormState);
   const [selected, setSelected] = useState<Option[]>([]);
-  const { user } = useUser();
 
   const { createStudentMutation, isCreateStudentLoading } = useCreateStudent();
+  const { allTherapists } = useGetAllTherapists({
+    filter: "",
+  });
 
   const handleCreateStudent = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -94,28 +97,21 @@ export default function StudentForm({
         form.therapists.map((therapist) => ({
           label: `${therapist.therapistName} (${therapist.therapistRole})`,
           value: therapist.id,
+          therapistName: therapist.therapistName,
+          therapistRole: therapist.therapistRole,
         }))
       );
     }
   }, [form.therapists]);
 
-  const therapistsFromDb = [
-    { id: "uuid-1", therapistName: "Dr. Smith" },
-    { id: "uuid-2", therapistName: "Dr. Lopez" },
-    { id: "uuid-3", therapistName: "Dr. Johnson" },
-  ];
-
-  // const therapistOptions: Option[] = form.therapists?.length
-  //   ? form?.therapists.map((t) => ({
-  //       label: t.therapistName,
-  //       value: t.id,
-  //     }))
-  //   : [];
-
-  const therapistOptions: Option[] = therapistsFromDb.map((t) => ({
-    label: t.therapistName,
-    value: t.therapistName,
-  }));
+  const therapistOptions: Option[] = allTherapists?.length
+    ? allTherapists.map((t) => ({
+        label: `${t.firstName} ${t.lastName}(${t.therapistRole})`,
+        value: t.id,
+        therapistName: `${t.firstName} ${t.lastName}`,
+        therapistRole: t.therapistRole,
+      }))
+    : [];
 
   return (
     <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
@@ -241,9 +237,9 @@ export default function StudentForm({
                   onTherapistSelect={(therapist) =>
                     setForm(
                       updateFormField(form, "therapists", {
-                        id: user!.id,
-                        therapistRole: therapist[0].value,
-                        therapistname: user?.username,
+                        id: therapist[0].value,
+                        therapistRole: therapist[0].therapistRole,
+                        therapistName: therapist[0].therapistName,
                       })
                     )
                   }

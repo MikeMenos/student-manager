@@ -8,21 +8,16 @@ export async function POST(req: NextRequest) {
   if (payload.type !== "user.created")
     return new Response("Ignored", { status: 200 });
 
-  const {
-    id: userId,
-    first_name,
-    last_name,
-    email_addresses,
-    public_metadata,
-  } = payload.data;
+  const { id, first_name, last_name, email_addresses, public_metadata } =
+    payload.data;
   await prisma.therapist.create({
     data: {
       therapistName: `${first_name!} ${last_name!}`,
       email: email_addresses[0].email_address,
-      id: userId,
+      id,
       therapistRole: public_metadata.therapistRole as SessionType,
     },
   });
 
-  return Response.json({ message: "Membership Created" });
+  return Response.json({ message: "Therapist Created" });
 }

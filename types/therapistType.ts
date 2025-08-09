@@ -1,7 +1,18 @@
+import { AttendanceT, SessionType } from "./attendance.type";
+import { StudentT } from "./student.type";
+
 export type TherapistCreationResponse = {
-  userId: string;
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+  therapistRole: SessionType;
+};
+
+export type TherapistT = {
+  id: string;
+  therapistRole: SessionType;
+  therapistName: string;
+  students?: StudentT[];
+  attendances?: AttendanceT[];
 };

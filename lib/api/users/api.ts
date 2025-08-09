@@ -6,7 +6,7 @@ export async function getAllTherapists(filter?: string) {
   const response = await axios.get(`${BASE_URL}/api/therapists`, {
     params: filter ? { filter } : {},
   });
-  const data = response.data.clients as TherapistCreationResponse[];
+  const data = response.data.therapists as TherapistCreationResponse[];
 
   return data;
 }

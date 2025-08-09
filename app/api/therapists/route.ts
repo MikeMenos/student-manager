@@ -10,7 +10,6 @@ export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const filter = searchParams.get("filter");
-
     const data = await prisma.therapist.findMany({
       where: filter
         ? {
@@ -21,8 +20,7 @@ export async function GET(req: Request) {
           }
         : undefined,
     });
-
-    return NextResponse.json({ clients: data });
+    return NextResponse.json({ therapists: data });
   } catch (error) {
     return NextResponse.json({ error });
   }

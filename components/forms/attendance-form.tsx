@@ -39,7 +39,6 @@ export default function AttendanceForm({
   const { user } = useUser();
   const [form, setForm] = useState<AttendanceT>(initialSessionFormState);
   const [isOpen, setIsOpen] = useState(false);
-  console.log(user);
 
   const { createAttendanceMutation, isCreateAttendanceLoading } =
     useCreateAttendance();

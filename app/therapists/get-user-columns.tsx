@@ -5,12 +5,12 @@ import { ColumnDef } from "@tanstack/react-table";
 
 export const getUsersColumns = (): ColumnDef<TherapistCreationResponse>[] => [
   {
-    accessorKey: "firstName",
-    header: "First Name",
+    accessorKey: "therapistName",
+    header: "Name",
   },
   {
-    accessorKey: "lastName",
-    header: "Last Name",
+    accessorKey: "therapistRole",
+    header: "Role",
   },
   {
     accessorKey: "email",
