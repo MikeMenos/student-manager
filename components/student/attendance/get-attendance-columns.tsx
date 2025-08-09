@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  // DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import DeleteUserFromClerkButton from "@/components/delete-user-button";
-import { MembershipsResponse } from "@/types/membership";
-import RenewSubscriptionButton from "@/components/renew-subscription-button";
+// import DeleteUserFromClerkButton from "@/components/delete-user-button";
+// import { MembershipsResponse } from "@/types/membership";
+// import RenewSubscriptionButton from "@/components/renew-subscription-button";
 import { AttendanceT } from "@/types/attendance.type";
 
 export const getAttendanceColumns = (): ColumnDef<AttendanceT>[] => [
