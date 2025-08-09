@@ -1,6 +1,6 @@
 "use client";
 import AddTherapist from "@/components/add-therapist";
-import SelectTherapistRole from "@/components/selectors/select-session-type";
+import SelectTherapistRole from "@/components/selectors/select-therapist-role";
 import { DataTable } from "@/components/shared/data-table";
 import Error from "@/components/shared/error";
 import Loader from "@/components/shared/loader";
@@ -82,8 +82,8 @@ export default function Users() {
             </DialogTrigger>
             <DialogContent>
               <SelectTherapistRole
-                onSelectTherapistRole={(sessionType) =>
-                  setTherapistRole(sessionType)
+                onSelectTherapistRole={(therapistRole) =>
+                  setTherapistRole(therapistRole)
                 }
               />
               <AddTherapist therapistRole={therapistRole} />
