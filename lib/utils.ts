@@ -7,7 +7,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const PROD_URL = "https://www.menoscodes.gr";
-export const DEV_URL = "https://strength-nation-development.up.railway.app";
+export const DEV_URL =
+  "https://therapy-institution-manager-development.up.railway.app";
 export const BASE_URL =
   process.env.NEXT_PUBLIC_RAILWAY_ENVIRONMENT_NAME === "production"
     ? PROD_URL
