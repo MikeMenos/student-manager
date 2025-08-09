@@ -3,8 +3,7 @@ import { StudentT } from "./student.type";
 
 export type TherapistCreationResponse = {
   id: string;
-  firstName: string;
-  lastName: string;
+  therapistName: string;
   email: string;
   therapistRole: SessionType;
 };

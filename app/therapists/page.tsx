@@ -91,7 +91,7 @@ export default function Users() {
           </Dialog>
         </div>
       </header>
-      <main className="flex-1 mt-14">
+      <main className="flex-1 mt-14 p-4">
         {isAllTherapistsRefetching || isAllTherapistsLoading ? (
           <Loader />
         ) : isAllTherapistsError ? (
