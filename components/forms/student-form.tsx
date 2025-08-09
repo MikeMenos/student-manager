@@ -106,9 +106,9 @@ export default function StudentForm({
 
   const therapistOptions: Option[] = allTherapists?.length
     ? allTherapists.map((t) => ({
-        label: `${t.firstName} ${t.lastName}(${t.therapistRole})`,
+        label: `${t.therapistName}(${t.therapistRole})`,
         value: t.id,
-        therapistName: `${t.firstName} ${t.lastName}`,
+        therapistName: t.therapistName,
         therapistRole: t.therapistRole,
       }))
     : [];
