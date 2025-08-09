@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 import { auth } from "@clerk/nextjs/server";
+import prisma from "@/lib/prisma";
 
 export async function GET(req: Request) {
   const { userId } = await auth();
@@ -14,8 +15,7 @@ export async function GET(req: Request) {
       where: filter
         ? {
             OR: [
-              { firstName: { contains: filter, mode: "insensitive" } },
-              { lastName: { contains: filter, mode: "insensitive" } },
+              { therapistName: { contains: filter, mode: "insensitive" } },
               { email: { contains: filter, mode: "insensitive" } },
             ],
           }
