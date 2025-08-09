@@ -1,4 +1,6 @@
+import AttendanceForm from "@/components/forms/attendance-form";
 import TileCardWrapper from "@/components/shared/tile-card-wrapper";
+import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Card,
@@ -9,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useGetSingleStudent } from "@/hooks/use-student";
 import { formatToDDMMYYYY } from "@/lib/helpers";
-import { CalendarIcon, Clock, FileText } from "lucide-react";
+import { CalendarIcon, Clock, Edit, FileText } from "lucide-react";
 import { useState } from "react";
 
 type AttendanceCardContentProps = {
@@ -63,8 +65,15 @@ export default function AttendanceCardContent({
               <TileCardWrapper>
                 <div className={`p-6`}>
                   <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-semibold">Session Duration</h2>
-                    <Clock className="h-6 w-6" />
+                    <div className="flex gap-2 items-center">
+                      <h2 className="text-xl font-semibold">
+                        Session Duration
+                      </h2>
+                      <Clock className="h-6 w-6" />
+                    </div>
+                    <Button variant="outline">
+                      <Edit className="h-3 w-3" />
+                    </Button>
                   </div>
                 </div>
                 <CardContent className="p-6">
@@ -78,6 +87,11 @@ export default function AttendanceCardContent({
                     </span>
                   </div>
                 </CardContent>
+                <AttendanceForm
+                  studentId={studentId}
+                  studentName={`${singleStudent.firstName} ${singleStudent.lastName}`}
+                  formData={singleStudent.attendances[0]}
+                />
               </TileCardWrapper>
             ) : (
               <div className="text-center py-8">

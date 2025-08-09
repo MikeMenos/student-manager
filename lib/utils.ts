@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const PROD_URL = "https://www.strengthnation.gr";
+export const PROD_URL = "https://www.menoscodes.gr";
 export const DEV_URL = "https://strength-nation-development.up.railway.app";
 export const BASE_URL =
   process.env.NEXT_PUBLIC_RAILWAY_ENVIRONMENT_NAME === "production"
@@ -36,7 +36,7 @@ export const centerOptions = [
   { label: "Aigio", value: "Aigio" },
 ];
 
-export const sessionTypeOptions = [
+export const sessionTypeOptions: { label: string; value: SessionType }[] = [
   { label: "Occupational", value: "Occupational" },
   { label: "Speech", value: "Speech" },
   { label: "Psychological", value: "Psychological" },

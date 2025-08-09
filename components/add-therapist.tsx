@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useInviteUser } from "@/hooks/use-invitation";
+import { useInviteTherapist } from "@/hooks/use-invitation";
 import { SessionType } from "@/types/attendance.type";
 import { useState } from "react";
 
@@ -13,7 +13,7 @@ export default function AddTherapist({
 }) {
   const [userEmail, setUserEmail] = useState("");
 
-  const { inviteUserMutation, isInviteUserLoading } = useInviteUser(
+  const { addTherapistMutation, isAddTherapistLoading } = useInviteTherapist(
     userEmail,
     setUserEmail,
     therapistRole
@@ -28,8 +28,8 @@ export default function AddTherapist({
         required
       />
       <Button
-        onClick={() => inviteUserMutation()}
-        disabled={isInviteUserLoading || !userEmail || !therapistRole}
+        onClick={() => addTherapistMutation()}
+        disabled={isAddTherapistLoading || !userEmail || !therapistRole}
         className="mt-8"
       >
         Add Therapist

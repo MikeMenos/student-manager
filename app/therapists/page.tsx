@@ -1,6 +1,9 @@
 "use client";
 import AddTherapist from "@/components/add-therapist";
 import SelectSessionType from "@/components/selectors/select-session-type";
+import { DataTable } from "@/components/shared/data-table";
+import Error from "@/components/shared/error";
+import Loader from "@/components/shared/loader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -12,10 +15,12 @@ import {
 } from "@/components/ui/sidebar";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useGetAllUsers } from "@/hooks/use-users";
+import { useGetAllTherapists } from "@/hooks/use-therapists";
 import { SessionType } from "@/types/attendance.type";
+import { TherapistCreationResponse } from "@/types/therapistType";
 import { Plus, Search } from "lucide-react";
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useMemo, useState } from "react";
+import { getUsersColumns } from "./get-user-columns";
 
 export default function Users() {
   const [userSearchInput, setUserSearchInput] = useState("");
@@ -24,11 +29,17 @@ export default function Users() {
 
   const { state } = useSidebar();
   const isMobile = useIsMobile();
+  const columns = useMemo(() => getUsersColumns(), []);
   const debouncedFilter = useDebounce(userSearchInput, 800);
 
-  const { allUsers } = useGetAllUsers({
+  const {
+    allTherapists,
+    isAllTherapistsError,
+    isAllTherapistsLoading,
+    isAllTherapistsRefetching,
+    refetchAllTherapists,
+  } = useGetAllTherapists({
     filter: debouncedFilter,
-    offset: undefined,
   });
 
   const handleSearchStudentInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,48 +47,61 @@ export default function Users() {
   };
 
   return (
-    <header
-      className={`border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-14 fixed top-0 z-10 ${
-        isMobile ? "w-full" : ""
-      }`}
-      style={
-        !isMobile
-          ? state === "expanded"
-            ? { width: `calc(100vw - ${SIDEBAR_WIDTH})` }
-            : { width: `calc(100vw - ${SIDEBAR_WIDTH_ICON})` }
-          : undefined
-      }
-    >
-      <div className="flex items-center gap-4 px-5 h-14">
-        <SidebarTrigger />
-        <div className="flex-1">
-          <div className="relative max-w-md">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name, grade, age, or parent..."
-              className="pl-8"
-              value={userSearchInput}
-              onChange={handleSearchStudentInput}
-            />
+    <>
+      <header
+        className={`border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 h-14 fixed top-0 z-10 ${
+          isMobile ? "w-full" : ""
+        }`}
+        style={
+          !isMobile
+            ? state === "expanded"
+              ? { width: `calc(100vw - ${SIDEBAR_WIDTH})` }
+              : { width: `calc(100vw - ${SIDEBAR_WIDTH_ICON})` }
+            : undefined
+        }
+      >
+        <div className="flex items-center gap-4 px-5 h-14">
+          <SidebarTrigger />
+          <div className="flex-1">
+            <div className="relative max-w-md">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by therapist name, role..."
+                className="pl-8"
+                value={userSearchInput}
+                onChange={handleSearchStudentInput}
+              />
+            </div>
           </div>
+          <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="h-4 w-4" />
+                Add Therapist
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <SelectSessionType
+                onSelectSessionType={(sessionType) =>
+                  setTherapistRole(sessionType)
+                }
+              />
+              <AddTherapist therapistRole={therapistRole} />
+            </DialogContent>
+          </Dialog>
         </div>
-        <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4" />
-              Add Therapist
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <SelectSessionType
-              onSelectSessionType={(sessionType) =>
-                setTherapistRole(sessionType)
-              }
-            />
-            <AddTherapist therapistRole={therapistRole} />
-          </DialogContent>
-        </Dialog>
-      </div>
-    </header>
+      </header>
+      <main className="flex-1 mt-14">
+        {isAllTherapistsRefetching || isAllTherapistsLoading ? (
+          <Loader />
+        ) : isAllTherapistsError ? (
+          <Error<TherapistCreationResponse[]>
+            refetchData={refetchAllTherapists}
+          />
+        ) : (
+          <DataTable columns={columns} data={allTherapists ?? []} />
+        )}
+      </main>
+    </>
   );
 }

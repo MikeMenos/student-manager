@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { BookOpen, GraduationCap, Settings, Users } from "lucide-react";
+import { BookOpen, GraduationCap, Settings, Speech, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useUser } from "@clerk/nextjs";
@@ -21,7 +21,7 @@ import Link from "next/link";
 
 const menuItems = [
   { title: "Classes", icon: BookOpen, url: "/" },
-  { title: "Therapists", icon: BookOpen, url: "/therapists" },
+  { title: "Therapists", icon: Speech, url: "/therapists" },
   { title: "Students", icon: Users, url: "/students" },
   { title: "Settings", icon: Settings, url: "#" },
 ];

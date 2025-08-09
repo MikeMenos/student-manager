@@ -15,7 +15,7 @@ export async function POST(req: Request) {
         sessionDate: formData.sessionDate as string,
         studentId: formData.studentId!,
         therapistId: formData.therapistId!,
-        sessionType: formData.sessionType,
+        sessionType: formData.sessionType!,
         sessionDuration: formData.sessionDuration,
       },
     });
