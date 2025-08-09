@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MultiSelect, Option } from "../ui/multi-select";
 
 export default function SelectTherapist({

@@ -1,18 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import {
-  BookOpen,
-  Users,
-  Plus,
-  Search,
-  Clock,
-  Building,
-  GraduationCap,
-  Edit,
-  Trash2,
-  Eye,
-} from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,17 +10,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -40,8 +19,29 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  BookOpen,
+  Building,
+  Clock,
+  Edit,
+  Eye,
+  GraduationCap,
+  Plus,
+  Search,
+  Trash2,
+  Users,
+} from "lucide-react";
+import { useState } from "react";
 
 export default function ClassesPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -139,16 +139,6 @@ export default function ClassesPage() {
         "Introduction to music theory, rhythm, and basic instruments.",
       status: "active",
     },
-  ];
-
-  const subjects = [
-    "All Subjects",
-    "Mathematics",
-    "English",
-    "Science",
-    "Art",
-    "Physical Education",
-    "Music",
   ];
 
   const filteredClasses = classes.filter((classItem) => {

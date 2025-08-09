@@ -1,23 +1,6 @@
 import AttendanceForm from "@/components/forms/attendance-form";
-import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useCreateAttendance } from "@/hooks/use-attendance";
-import { formatToDDMMYYYY, updateFormField } from "@/lib/helpers";
 import { AttendanceT } from "@/types/attendance.type";
-import { useUser } from "@clerk/nextjs";
-import { Plus } from "lucide-react";
-import { FormEvent, useState } from "react";
 
 type AttendanceCardHeaderProps = {
   studentName: string;

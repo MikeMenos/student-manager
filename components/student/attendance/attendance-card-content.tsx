@@ -24,8 +24,7 @@ export default function AttendanceCardContent({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
-  const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
-    useGetSingleStudent(studentId, selectedDate);
+  const { singleStudent } = useGetSingleStudent(studentId, selectedDate);
 
   return (
     <CardContent>
