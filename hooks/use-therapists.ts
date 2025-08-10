@@ -1,5 +1,10 @@
-import { getAllTherapists } from "@/lib/api/users/api";
-import { useQuery } from "@tanstack/react-query";
+import { errorToast, successToast } from "@/components/shared/toasts";
+import {
+  deleteUserFromClerkAndDb,
+  getAllTherapists,
+} from "@/lib/api/users/api";
+import { THERAPISTS_QUERY_KEY } from "@/lib/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetAllTherapists = ({
   offset,
@@ -9,7 +14,7 @@ export const useGetAllTherapists = ({
   filter: string;
 }) => {
   const { data, isLoading, isError, refetch, isRefetching } = useQuery({
-    queryKey: [offset, filter],
+    queryKey: [THERAPISTS_QUERY_KEY, offset, filter],
     queryFn: () => getAllTherapists(filter),
   });
 
@@ -20,4 +25,31 @@ export const useGetAllTherapists = ({
     refetchAllTherapists: refetch,
     isAllTherapistsRefetching: isRefetching,
   };
+};
+
+export const useDeleteClientFromClerk = () => {
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: deleteUserFromClerkMutation,
+    isPending: isDeleteUserFromClerkLoading,
+  } = useMutation({
+    mutationFn: async ({
+      clerkUserId,
+      dbUserId,
+    }: {
+      clerkUserId: string;
+      dbUserId: string;
+    }) => await deleteUserFromClerkAndDb({ clerkUserId, dbUserId }),
+    onSuccess: (data) => {
+      successToast(data.data.message);
+      queryClient.invalidateQueries({
+        queryKey: [THERAPISTS_QUERY_KEY],
+      });
+    },
+    onError: ({ message }: { message: string }) => {
+      errorToast(message);
+    },
+  });
+  return { deleteUserFromClerkMutation, isDeleteUserFromClerkLoading };
 };

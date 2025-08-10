@@ -10,3 +10,15 @@ export async function getAllTherapists(filter?: string) {
 
   return data;
 }
+
+export async function deleteUserFromClerkAndDb({
+  clerkUserId,
+  dbUserId,
+}: {
+  clerkUserId: string;
+  dbUserId: string;
+}) {
+  return await axios.delete(`${BASE_URL}/api/therapists`, {
+    params: { clerkUserId, dbUserId },
+  });
+}

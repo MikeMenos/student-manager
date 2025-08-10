@@ -13,11 +13,19 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { BookOpen, GraduationCap, Settings, Speech, Users } from "lucide-react";
+import {
+  BookOpen,
+  GraduationCap,
+  LogOut,
+  Settings,
+  Speech,
+  Users,
+} from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useUser } from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { cn, SIGN_IN_PATH } from "@/lib/utils";
 
 const menuItems = [
   { title: "Classes", icon: BookOpen, url: "/" },
@@ -29,7 +37,7 @@ const menuItems = [
 export default function Sidebar() {
   const { open } = useSidebar();
   const pathname = usePathname();
-  const { isSignedIn } = useUser();
+  const { isSignedIn, user } = useUser();
 
   if (!isSignedIn) return null;
 
@@ -59,6 +67,16 @@ export default function Sidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem className="cursor-pointer">
+                <SidebarMenuButton asChild>
+                  <SignOutButton redirectUrl={`${SIGN_IN_PATH}`}>
+                    <div>
+                      <LogOut className="text-red-500" />
+                      <span className="font-medium text-red-500">Log out</span>
+                    </div>
+                  </SignOutButton>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -66,17 +84,27 @@ export default function Sidebar() {
       <SidebarFooter className="border-t">
         {!open && (
           <Avatar className="h-8 w-8 mx-auto">
-            <AvatarFallback>TC</AvatarFallback>
+            <AvatarFallback>
+              {user?.firstName?.split("")[0]}
+              {user?.lastName?.split("")[0]}
+            </AvatarFallback>
           </Avatar>
         )}
         {open && (
           <div className="flex items-center gap-2 px-4 py-2">
             <Avatar className="h-8 w-8">
-              <AvatarFallback>TC</AvatarFallback>
+              <AvatarFallback>
+                {user?.firstName?.split("")[0]}
+                {user?.lastName?.split("")[0]}
+              </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-medium">Ms. Thompson</span>
-              <span className="text-xs text-muted-foreground">Principal</span>
+              <span className="text-sm font-medium">
+                {user?.firstName} {user?.lastName}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {user?.publicMetadata?.therapistRole as string}
+              </span>
             </div>
           </div>
         )}

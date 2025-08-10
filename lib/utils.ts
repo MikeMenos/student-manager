@@ -18,6 +18,7 @@ export const BASE_URL =
 export const SIGN_UP_PATH = "/sign-up";
 export const SIGN_IN_PATH = "/sign-in";
 
+export const THERAPISTS_QUERY_KEY = "therapists";
 export const STUDENTS_QUERY_KEY = "students";
 export const STUDENT_QUERY_KEY = "student";
 

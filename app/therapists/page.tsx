@@ -86,7 +86,10 @@ export default function Users() {
                   setTherapistRole(therapistRole)
                 }
               />
-              <AddTherapist therapistRole={therapistRole} />
+              <AddTherapist
+                therapistRole={therapistRole}
+                setTherapistRole={setTherapistRole}
+              />
             </DialogContent>
           </Dialog>
         </div>

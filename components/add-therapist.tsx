@@ -4,12 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useInviteTherapist } from "@/hooks/use-invitation";
 import { SessionType } from "@/types/attendance.type";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function AddTherapist({
   therapistRole,
+  setTherapistRole,
 }: {
   therapistRole?: SessionType;
+  setTherapistRole: Dispatch<SetStateAction<SessionType | undefined>>;
 }) {
   const [userEmail, setUserEmail] = useState("");
 

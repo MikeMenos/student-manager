@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     data: {
       therapistName: `${first_name!} ${last_name!}`,
       email: email_addresses[0].email_address,
-      id,
+      therapistId: id,
       therapistRole: public_metadata.therapistRole as SessionType,
     },
   });

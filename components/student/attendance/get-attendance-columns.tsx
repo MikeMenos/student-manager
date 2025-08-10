@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import DeleteUserFromClerkButton from "@/components/delete-user-button";
+// import DeleteUserFromClerkAndDbButton from "@/components/delete-user-button";
 // import { MembershipsResponse } from "@/types/membership";
 // import RenewSubscriptionButton from "@/components/renew-subscription-button";
 import { AttendanceT } from "@/types/attendance.type";
@@ -52,7 +52,7 @@ export const getAttendanceColumns = (): ColumnDef<AttendanceT>[] => [
               className="cursor-pointer bg-red-500 text-white focus:bg-red-600 focus:text-white"
               onSelect={(e) => e.preventDefault()}
             >
-              <DeleteUserFromClerkButton rowData={rowData} />
+              <DeleteUserFromClerkAndDbButton rowData={rowData} />
             </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
