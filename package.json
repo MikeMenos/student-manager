@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start -p $PORT",
+    "dev": "next dev -p 3000",
+    "tunnel": "npx --yes localtunnel --port 3000 --subdomain nice-tomatos-give",
+    "dev:with-tunnel": "concurrently -k -n dev,tunnel \"npm:dev\" \"npm:tunnel\"",
     "lint": "next lint"
   },
   "prisma": {
@@ -50,6 +50,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.2",
     "prisma": "^6.13.0",

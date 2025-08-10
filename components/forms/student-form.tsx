@@ -33,7 +33,6 @@ import { useCreateStudent } from "@/hooks/use-student";
 import SelectCenter from "../selectors/select-center";
 import SelectTherapist from "../selectors/select-therapist";
 import { Option } from "../ui/multi-select";
-import { useUser } from "@clerk/nextjs";
 import { useGetAllTherapists } from "@/hooks/use-therapists";
 
 type StudentFormProps = {
@@ -112,6 +111,18 @@ export default function StudentForm({
         therapistRole: t.therapistRole,
       }))
     : [];
+
+  const handleTherapistSelect = (therapists: Option[]) => {
+    setSelected(therapists);
+    setForm({
+      ...form,
+      therapists: therapists.map((t) => ({
+        id: t.value,
+        therapistName: t.therapistName,
+        therapistRole: t.therapistRole,
+      })),
+    });
+  };
 
   return (
     <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
@@ -234,15 +245,7 @@ export default function StudentForm({
               <div className="grid gap-2">
                 <Label htmlFor="relation">Therapists</Label>
                 <SelectTherapist
-                  onTherapistSelect={(therapist) =>
-                    setForm(
-                      updateFormField(form, "therapists", {
-                        id: therapist[0].value,
-                        therapistRole: therapist[0].therapistRole,
-                        therapistName: therapist[0].therapistName,
-                      })
-                    )
-                  }
+                  onTherapistSelect={handleTherapistSelect}
                   value={selected}
                   options={therapistOptions}
                 />

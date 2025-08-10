@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { SessionType } from "@/types/attendance.type";
 import { Check, ChevronsUpDown, X } from "lucide-react";
 import * as React from "react";
 
@@ -16,7 +17,7 @@ export type Option = {
   label: string;
   value: string;
   therapistName: string;
-  therapistRole: string;
+  therapistRole: SessionType;
 };
 
 interface MultiSelectProps {

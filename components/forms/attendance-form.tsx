@@ -1,4 +1,10 @@
-import { useState, FormEvent, useEffect } from "react";
+import {
+  useState,
+  FormEvent,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -7,15 +13,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
 import { AttendanceT } from "@/types/attendance.type";
 import { updateFormField, formatToDDMMYYYY } from "@/lib/helpers";
 import { useCreateAttendance } from "@/hooks/use-attendance";
 import { useUser } from "@clerk/nextjs";
+import { useGetAllTherapists } from "@/hooks/use-therapists";
 
 export const initialSessionFormState: AttendanceT = {
   sessionDate: new Date(),
@@ -28,24 +33,38 @@ type AttendanceFormProps = {
   studentId: string;
   studentName: string;
   formData?: AttendanceT;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  isEdit?: boolean;
+  setIsEdit?: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function AttendanceForm({
   studentId,
   studentName,
   formData,
+  isOpen,
+  setIsOpen,
+  isEdit,
+  setIsEdit,
 }: AttendanceFormProps) {
-  const isEdit = !!formData?.id;
   const { user } = useUser();
   const [form, setForm] = useState<AttendanceT>(initialSessionFormState);
-  const [isOpen, setIsOpen] = useState(false);
 
   const { createAttendanceMutation, isCreateAttendanceLoading } =
     useCreateAttendance();
-
+  const { allTherapists } = useGetAllTherapists({
+    filter: "",
+  });
+  const loggedInTherapist = allTherapists?.find(
+    (therapist) => therapist.therapistId === user?.id
+  );
   const handleOnClose = () => {
     setForm(initialSessionFormState);
     setIsOpen(false);
+    if (setIsEdit) {
+      setIsEdit(false);
+    }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -55,32 +74,19 @@ export default function AttendanceForm({
         ...form,
         studentId,
         sessionDate: formatToDDMMYYYY(form.sessionDate),
-        therapistId: user?.id,
       },
       { onSuccess: handleOnClose }
     );
   };
 
   useEffect(() => {
-    setForm((prev) => ({
-      ...prev,
-      // sessionType: user?.therapistRole,
-    }));
-  }, []);
-
-  useEffect(() => {
-    if (formData) {
+    if (formData && isEdit) {
       setForm(formData);
     }
-  }, [formData]);
+  }, [formData, isEdit]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus className="h-4 w-4 mr-1" /> {isEdit ? "Edit" : "Add"} Session
-        </Button>
-      </DialogTrigger>
       <DialogContent className="max-w-2xl">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
@@ -99,7 +105,7 @@ export default function AttendanceForm({
                   value={
                     form.sessionDate instanceof Date
                       ? form.sessionDate.toISOString().split("T")[0]
-                      : new Date(form.sessionDate).toISOString().split("T")[0]
+                      : form.sessionDate
                   }
                   onChange={(e) =>
                     setForm(
@@ -114,7 +120,11 @@ export default function AttendanceForm({
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="sessionType">Session Type</Label>
-                <Input id="sessionType" value={form.sessionType} disabled />
+                <Input
+                  id="sessionType"
+                  value={loggedInTherapist?.therapistRole}
+                  disabled
+                />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -140,7 +150,7 @@ export default function AttendanceForm({
                 <Input
                   id="therapist"
                   placeholder="Therapist name"
-                  value={user!.username ?? ""}
+                  value={loggedInTherapist?.therapistName}
                   disabled
                 />
               </div>

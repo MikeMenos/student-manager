@@ -36,6 +36,7 @@ export async function GET(req: Request) {
       include: {
         parentInfo: true,
         attendances: true,
+        therapists: true,
       },
     });
 
@@ -85,8 +86,11 @@ export async function POST(req: Request) {
               })
             ),
           },
+          therapists: {
+            connect: formData.therapists?.map((t) => ({ id: t.id })),
+          },
         },
-        include: { parentInfo: true },
+        include: { parentInfo: true, therapists: true },
       });
     } else {
       student = await prisma.student.create({
@@ -102,8 +106,11 @@ export async function POST(req: Request) {
               })
             ),
           },
+          therapists: {
+            connect: formData.therapists?.map((t) => ({ id: t.id })),
+          },
         },
-        include: { parentInfo: true },
+        include: { parentInfo: true, therapists: true },
       });
     }
 
@@ -128,6 +135,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const { userId } = await auth();
   if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id")!;
@@ -136,9 +144,10 @@ export async function DELETE(req: Request) {
       where: {
         id,
       },
+      include: { parentInfo: true },
     });
 
-    return NextResponse.json({ message: "StudentT deleted" });
+    return NextResponse.json({ message: "Student deleted" });
   } catch {
     return NextResponse.json(
       { message: "Failed to delete student" },

@@ -1,12 +1,19 @@
 import { BASE_URL } from "@/lib/utils";
 import axios from "axios";
-import { TherapistCreationResponse } from "@/types/therapistType";
+import { TherapistCreationResponse, TherapistT } from "@/types/therapistType";
 
 export async function getAllTherapists(filter?: string) {
   const response = await axios.get(`${BASE_URL}/api/therapists`, {
     params: filter ? { filter } : {},
   });
   const data = response.data.therapists as TherapistCreationResponse[];
+
+  return data;
+}
+
+export async function getSingleTherapist(id: string) {
+  const response = await axios.get(`${BASE_URL}/api/therapists/${id}`);
+  const data = response.data.therapist as TherapistT;
 
   return data;
 }

@@ -63,5 +63,5 @@ model ParentInfo {
   email      String?
 
   studentId String
-  Student   Student @relation(fields: [studentId], references: [id])
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }

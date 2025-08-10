@@ -2,8 +2,9 @@ import { errorToast, successToast } from "@/components/shared/toasts";
 import {
   deleteUserFromClerkAndDb,
   getAllTherapists,
+  getSingleTherapist,
 } from "@/lib/api/users/api";
-import { THERAPISTS_QUERY_KEY } from "@/lib/utils";
+import { THERAPIST_QUERY_KEY, THERAPISTS_QUERY_KEY } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetAllTherapists = ({
@@ -24,6 +25,21 @@ export const useGetAllTherapists = ({
     isAllTherapistsError: isError,
     refetchAllTherapists: refetch,
     isAllTherapistsRefetching: isRefetching,
+  };
+};
+
+export const useGetSingleTherapist = (id: string) => {
+  const { data, isLoading, isError, refetch, isRefetching } = useQuery({
+    queryKey: [THERAPIST_QUERY_KEY, id],
+    queryFn: () => getSingleTherapist(id),
+  });
+
+  return {
+    singleStudent: data,
+    isSingleStudentLoading: isLoading,
+    isSingleStudentError: isError,
+    refetchSingleStudent: refetch,
+    isSingleStudentRefetching: isRefetching,
   };
 };
 

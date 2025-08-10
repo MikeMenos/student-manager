@@ -12,19 +12,28 @@ import {
 import { useGetSingleStudent } from "@/hooks/use-student";
 import { formatToDDMMYYYY } from "@/lib/helpers";
 import { CalendarIcon, Clock, Edit, FileText } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type AttendanceCardContentProps = {
   studentId: string;
+  isOpen: boolean;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function AttendanceCardContent({
   studentId,
+  isOpen,
+  setIsOpen,
 }: AttendanceCardContentProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date()
   );
+  const [isEdit, setIsEdit] = useState(false);
   const { singleStudent } = useGetSingleStudent(studentId, selectedDate);
+  const onOpenEditAttendanceForm = () => {
+    setIsOpen(true);
+    setIsEdit(true);
+  };
 
   return (
     <CardContent>
@@ -70,7 +79,10 @@ export default function AttendanceCardContent({
                       </h2>
                       <Clock className="h-6 w-6" />
                     </div>
-                    <Button variant="outline">
+                    <Button
+                      variant="outline"
+                      onClick={onOpenEditAttendanceForm}
+                    >
                       <Edit className="h-3 w-3" />
                     </Button>
                   </div>
@@ -90,6 +102,10 @@ export default function AttendanceCardContent({
                   studentId={studentId}
                   studentName={`${singleStudent.firstName} ${singleStudent.lastName}`}
                   formData={singleStudent.attendances[0]}
+                  isOpen={isOpen}
+                  setIsOpen={setIsOpen}
+                  isEdit={isEdit}
+                  setIsEdit={setIsEdit}
                 />
               </TileCardWrapper>
             ) : (
