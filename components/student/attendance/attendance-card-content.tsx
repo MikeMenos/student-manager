@@ -18,15 +18,7 @@ import { useGetSingleStudent } from "@/hooks/use-student";
 import { formatToDDMMYYYY } from "@/lib/helpers";
 import { StudentT } from "@/types/student.type";
 import { useUser } from "@clerk/nextjs";
-import {
-  CalendarIcon,
-  Clock,
-  Delete,
-  Edit,
-  FileText,
-  Trash,
-  User,
-} from "lucide-react";
+import { CalendarIcon, Clock, Edit, FileText, Trash, User } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 
 type AttendanceCardContentProps = {
@@ -54,8 +46,7 @@ export default function AttendanceCardContent({
     isSingleStudentRefetching,
     refetchSingleStudent,
   } = useGetSingleStudent(studentId, selectedDate);
-  const { deleteAttendanceMutation, isDeleteAttendanceLoading } =
-    useDeleteAttendance();
+  const { deleteAttendanceMutation } = useDeleteAttendance();
 
   const onOpenEditAttendanceForm = () => {
     setIsOpen(true);
