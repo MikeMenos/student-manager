@@ -1,10 +1,3 @@
-import {
-  useState,
-  FormEvent,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,17 +9,24 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AttendanceT } from "@/types/attendance.type";
+import { useCreateAttendance } from "@/hooks/use-attendance";
+import { useGetAllTherapists } from "@/hooks/use-therapists";
 import {
-  updateFormField,
   formatToDDMMYYYY,
   parseDDMMYYYYToDate,
-  toInputDateString,
   parseInputDateString,
+  toInputDateString,
+  updateFormField,
 } from "@/lib/helpers";
-import { useCreateAttendance } from "@/hooks/use-attendance";
+import { AttendanceT } from "@/types/attendance.type";
 import { useUser } from "@clerk/nextjs";
-import { useGetAllTherapists } from "@/hooks/use-therapists";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 export const initialSessionFormState: AttendanceT = {
   sessionDate: new Date(),
