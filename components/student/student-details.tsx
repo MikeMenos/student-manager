@@ -6,10 +6,12 @@ import { AttendanceContent } from "./attendance/attendance-card";
 import DeleteStudent from "./delete-student";
 import StudentForm from "../forms/student-form";
 import Error from "../shared/error";
-import Loader from "../shared/loader";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import RelationsContent from "./relations-content";
+import { useUser } from "@clerk/nextjs";
+import TherapistContent from "./therapists-content";
+import { Loader } from "../shared/loader";
 
 export default function StudentDetails({
   studentId,
@@ -19,11 +21,16 @@ export default function StudentDetails({
   setSelectedStudent: Dispatch<SetStateAction<string>>;
 }) {
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
+
+  const { user } = useUser();
   const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
     useGetSingleStudent(studentId, undefined);
+
   if (isSingleStudentLoading) return <Loader />;
   if (isSingleStudentError) return <Error<StudentT> />;
   if (!singleStudent) return null;
+
+  const role = (user?.publicMetadata?.role as string) || "";
 
   return (
     <div className="flex-1 overflow-auto">
@@ -56,18 +63,25 @@ export default function StudentDetails({
               selectedStudent={singleStudent}
               key={singleStudent.id}
             />
-            <DeleteStudent
-              singleStudent={singleStudent}
-              setSelectedStudent={setSelectedStudent}
-            />
+            {role === "admin" && (
+              <DeleteStudent
+                singleStudent={singleStudent}
+                setSelectedStudent={setSelectedStudent}
+              />
+            )}
           </div>
         </div>
         <Tabs defaultValue="Relations" className="space-y-4">
           <TabsList>
             <TabsTrigger value="Relations">Relations</TabsTrigger>
+            {role === "admin" && (
+              <TabsTrigger value="therapists">Therapists</TabsTrigger>
+            )}
             <TabsTrigger value="attendance">Attendance</TabsTrigger>
             <TabsTrigger value="files">Files</TabsTrigger>
-            <TabsTrigger value="payments">Payments</TabsTrigger>
+            {role === "admin" && (
+              <TabsTrigger value="payments">Payments</TabsTrigger>
+            )}
           </TabsList>
           <TabsContent value="Relations" className="space-y-4">
             <RelationsContent singleStudent={singleStudent} />
@@ -77,6 +91,9 @@ export default function StudentDetails({
               studentName={`${singleStudent.firstName} ${singleStudent.lastName}`}
               studentId={studentId}
             />
+          </TabsContent>
+          <TabsContent value="therapists" className="space-y-4">
+            <TherapistContent singleStudent={singleStudent} />
           </TabsContent>
         </Tabs>
       </div>

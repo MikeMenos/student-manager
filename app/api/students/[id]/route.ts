@@ -1,30 +1,40 @@
 // app/api/students/[id]/route.ts
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth();
-  if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
+  if (!userId) {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const user = await currentUser();
+  const role = user?.publicMetadata?.role as string | undefined;
 
   const id = req.nextUrl.pathname.split("/").pop();
   const { searchParams } = new URL(req.url);
   const sessionDate = searchParams.get("sessionDate");
+
   try {
     const student = await prisma.student.findUnique({
       where: { id },
       include: {
         parentInfo: true,
         attendances: {
-          where: sessionDate ? { sessionDate } : undefined,
+          where: {
+            ...(sessionDate ? { sessionDate } : {}),
+            ...(role !== "admin" ? { therapistId: userId } : {}), // Filter by current therapist if not admin
+          },
         },
-        therapists: true,
+        therapists:
+          role === "admin" ? true : { where: { therapistId: userId } }, // Limit therapists array too if needed
       },
     });
 
     if (!student) {
       return NextResponse.json(
-        { message: "StudentT not found" },
+        { message: "Student not found" },
         { status: 404 }
       );
     }

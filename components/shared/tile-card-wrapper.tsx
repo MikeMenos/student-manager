@@ -3,7 +3,7 @@ import { Card } from "../ui/card";
 
 export default function TileCardWrapper({ children }: { children: ReactNode }) {
   return (
-    <Card className="overflow-hidden shadow-lg rounded-xl border-0">
+    <Card className="overflow-hidden shadow-lg rounded-xl border-0 hover:shadow-xl hover:cursor-pointer transition-shadow">
       {children}
     </Card>
   );

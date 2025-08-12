@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import axios from "axios";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
+import { Prisma, TherapyCenters } from "@prisma/client";
 
 export async function GET(req: Request) {
   const { userId } = await auth();
@@ -9,16 +10,25 @@ export async function GET(req: Request) {
 
   try {
     const { searchParams } = new URL(req.url);
-    const filter = searchParams.get("filter");
+    const filterRaw = (searchParams.get("filter") ?? "").trim();
+
+    const ors: Prisma.TherapistWhereInput[] = [
+      { therapistName: { contains: filterRaw, mode: "insensitive" } },
+      { email: { contains: filterRaw, mode: "insensitive" } },
+    ];
+
+    const matchedCenters = filterRaw
+      ? (Object.values(TherapyCenters) as string[]).filter((c) =>
+          c.toLowerCase().includes(filterRaw.toLowerCase())
+        )
+      : [];
+
+    if (matchedCenters.length) {
+      ors.push({ center: { in: matchedCenters as TherapyCenters[] } });
+    }
+
     const data = await prisma.therapist.findMany({
-      where: filter
-        ? {
-            OR: [
-              { therapistName: { contains: filter, mode: "insensitive" } },
-              { email: { contains: filter, mode: "insensitive" } },
-            ],
-          }
-        : undefined,
+      where: filterRaw ? { OR: ors } : undefined,
     });
     return NextResponse.json({ therapists: data });
   } catch (error) {

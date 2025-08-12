@@ -34,6 +34,8 @@ import SelectCenter from "../selectors/select-center";
 import SelectTherapist from "../selectors/select-therapist";
 import { Option } from "../ui/multi-select";
 import { useGetAllTherapists } from "@/hooks/use-therapists";
+import { useUser } from "@clerk/nextjs";
+import { errorToast } from "../shared/toasts";
 
 type StudentFormProps = {
   isStudentFormOpen: boolean;
@@ -68,11 +70,15 @@ export default function StudentForm({
 }: StudentFormProps) {
   const [form, setForm] = useState<StudentT>(initialStudentFormState);
   const [selected, setSelected] = useState<Option[]>([]);
+  const [filter, setFilter] = useState("");
 
+  const { user } = useUser();
   const { createStudentMutation, isCreateStudentLoading } = useCreateStudent();
   const { allTherapists } = useGetAllTherapists({
-    filter: "",
+    filter,
   });
+
+  const role = (user?.publicMetadata?.role as string) || "";
 
   const handleCreateStudent = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,6 +104,10 @@ export default function StudentForm({
           value: therapist.id,
           therapistName: therapist.therapistName,
           therapistRole: therapist.therapistRole,
+          center: therapist.center,
+          phone: therapist.phone,
+          therapistId: therapist.therapistId,
+          email: therapist.email,
         }))
       );
     }
@@ -105,10 +115,14 @@ export default function StudentForm({
 
   const therapistOptions: Option[] = allTherapists?.length
     ? allTherapists.map((t) => ({
-        label: `${t.therapistName}(${t.therapistRole})`,
+        label: `${t.therapistName} (${t.therapistRole})`,
         value: t.id,
         therapistName: t.therapistName,
         therapistRole: t.therapistRole,
+        center: t.center,
+        phone: t.phone,
+        therapistId: t.therapistId,
+        email: t.email,
       }))
     : [];
 
@@ -120,23 +134,29 @@ export default function StudentForm({
         id: t.value,
         therapistName: t.therapistName,
         therapistRole: t.therapistRole,
+        center: t.center,
+        phone: t.phone,
+        therapistId: t.therapistId,
+        email: t.email,
       })),
     });
   };
 
   return (
     <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          {selectedStudent ? (
-            <Pencil className="h-4 w-4" />
-          ) : (
-            <Plus className="h-4 w-4" />
-          )}
+      {role === "admin" && (
+        <DialogTrigger asChild>
+          <Button>
+            {selectedStudent ? (
+              <Pencil className="h-4 w-4" />
+            ) : (
+              <Plus className="h-4 w-4" />
+            )}
 
-          {selectedStudent ? `Edit` : "Add Students"}
-        </Button>
-      </DialogTrigger>
+            {selectedStudent ? `Edit` : "Add Students"}
+          </Button>
+        </DialogTrigger>
+      )}
       <DialogContent className="max-w-2xl">
         <form onSubmit={(e) => handleCreateStudent(e)}>
           <DialogHeader>
@@ -231,26 +251,27 @@ export default function StudentForm({
                 required
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="relation">Center</Label>
-                <SelectCenter
-                  onSelectCenter={(center) =>
-                    setForm(updateFormField(form, "center", center))
-                  }
-                  hasAllCenterOption={false}
-                  value={form.center}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="relation">Therapists</Label>
-                <SelectTherapist
-                  onTherapistSelect={handleTherapistSelect}
-                  value={selected}
-                  options={therapistOptions}
-                />
-              </div>
+            <div className="grid gap-2">
+              <Label htmlFor="relation">Center</Label>
+              <SelectCenter
+                onSelectCenter={(center) => {
+                  setForm(updateFormField(form, "center", center));
+                  setFilter(center);
+                }}
+                hasAllCenterOption={false}
+                value={form.center}
+              />
             </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="relation">Therapists</Label>
+              <SelectTherapist
+                onTherapistSelect={handleTherapistSelect}
+                value={selected}
+                options={therapistOptions}
+              />
+            </div>
+
             <Separator />
             <div className="flex items-center justify-between">
               <h4 className="font-medium">Parent/Guardian Information</h4>

@@ -28,27 +28,28 @@ export const useGetAllTherapists = ({
   };
 };
 
-export const useGetSingleTherapist = (id: string) => {
+export const useGetSingleTherapist = (therapistId: string) => {
   const { data, isLoading, isError, refetch, isRefetching } = useQuery({
-    queryKey: [THERAPIST_QUERY_KEY, id],
-    queryFn: () => getSingleTherapist(id),
+    queryKey: [THERAPIST_QUERY_KEY, therapistId],
+    queryFn: () => getSingleTherapist(therapistId),
+    enabled: !!therapistId,
   });
 
   return {
-    singleStudent: data,
-    isSingleStudentLoading: isLoading,
-    isSingleStudentError: isError,
-    refetchSingleStudent: refetch,
-    isSingleStudentRefetching: isRefetching,
+    singleTherapist: data,
+    isSingleTherapistLoading: isLoading,
+    isSingleTherapistError: isError,
+    refetchTherapistStudent: refetch,
+    isSingleTherapistRefetching: isRefetching,
   };
 };
 
-export const useDeleteClientFromClerk = () => {
+export const useDeleteClientFromClerkAndDb = () => {
   const queryClient = useQueryClient();
 
   const {
-    mutate: deleteUserFromClerkMutation,
-    isPending: isDeleteUserFromClerkLoading,
+    mutate: deleteUserFromClerkAndDbMutation,
+    isPending: isDeleteUserFromClerkAndDbLoading,
   } = useMutation({
     mutationFn: async ({
       clerkUserId,
@@ -67,5 +68,8 @@ export const useDeleteClientFromClerk = () => {
       errorToast(message);
     },
   });
-  return { deleteUserFromClerkMutation, isDeleteUserFromClerkLoading };
+  return {
+    deleteUserFromClerkAndDbMutation,
+    isDeleteUserFromClerkAndDbLoading,
+  };
 };

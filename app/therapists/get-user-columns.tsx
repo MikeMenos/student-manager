@@ -1,6 +1,6 @@
 "use client";
 
-import DeleteUserFromClerkAndDbButton from "@/components/delete-user-from-clerk";
+import DeleteUserFromClerkAndDbButton from "@/components/delete-user-from-clerk-and-db";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,18 +10,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { TherapistCreationResponse } from "@/types/therapistType";
+import { TherapistCreationResponseT } from "@/types/therapistType";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-export const getUsersColumns = (): ColumnDef<TherapistCreationResponse>[] => [
+export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
   {
     accessorKey: "therapistName",
     header: "Name",
   },
   {
-    accessorKey: "therapistRole",
-    header: "Role",
+    accessorKey: "phone",
+    header: "Phone Number",
   },
   {
     accessorKey: "email",
@@ -29,6 +29,14 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponse>[] => [
     cell: ({ row }) => {
       return row.original.email;
     },
+  },
+  {
+    accessorKey: "therapistRole",
+    header: "Role",
+  },
+  {
+    accessorKey: "center",
+    header: "Center",
   },
   {
     id: "actions",

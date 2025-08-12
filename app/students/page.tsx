@@ -1,7 +1,6 @@
 "use client";
 
 import Error from "@/components/shared/error";
-import Loader from "@/components/shared/loader";
 import SelectCenter from "@/components/selectors/select-center";
 import StudentDetails from "@/components/student/student-details";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -21,6 +20,8 @@ import { Building, Search } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import StudentForm from "../../components/forms/student-form";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useUser } from "@clerk/nextjs";
+import { Loader } from "@/components/shared/loader";
 
 export default function StudentsPage() {
   const [selectedStudent, setSelectedStudent] = useState("");
@@ -32,6 +33,7 @@ export default function StudentsPage() {
   const isGradeFilter = filter === "all" || centerValues.includes(filter);
   const debounceDelay = isGradeFilter ? 0 : 800;
 
+  const { user } = useUser();
   const { state } = useSidebar();
   const isMobile = useIsMobile();
   const debouncedFilter = useDebounce(filter, debounceDelay);
@@ -50,6 +52,9 @@ export default function StudentsPage() {
     setFilter(e.target.value);
     setStudentSearchInput(e.target.value);
   };
+
+  const role = (user?.publicMetadata?.role as string) || "";
+
   return (
     <>
       <header
@@ -85,12 +90,14 @@ export default function StudentsPage() {
       </header>
       <main className="flex-1 mt-14">
         <div className="grid h-full lg:grid-cols-[350px_1fr]">
-          <div className="border-r bg-muted/10 p-4">
+          <div className="border-r bg-muted/10 p-4 border-b lg:border-b-0">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-lg">
                 Students {allStudents?.length ? `(${allStudents?.length})` : ""}
               </h2>
-              <SelectCenter onSelectCenter={(center) => setFilter(center)} />
+              {role === "admin" && (
+                <SelectCenter onSelectCenter={(center) => setFilter(center)} />
+              )}
             </div>
             {isAllStudentsLoading || isAllStudentsRefetching ? (
               <Loader />

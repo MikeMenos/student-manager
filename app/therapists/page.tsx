@@ -1,9 +1,7 @@
 "use client";
 import AddTherapist from "@/components/add-therapist";
-import SelectTherapistRole from "@/components/selectors/select-therapist-role";
 import { DataTable } from "@/components/shared/data-table";
 import Error from "@/components/shared/error";
-import Loader from "@/components/shared/loader";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -17,13 +15,19 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useGetAllTherapists } from "@/hooks/use-therapists";
 import { SessionType } from "@/types/attendance.type";
-import { TherapistCreationResponse } from "@/types/therapistType";
+import {
+  TherapistCreationResponseT,
+  TherapyCenters,
+} from "@/types/therapistType";
 import { Plus, Search } from "lucide-react";
 import { ChangeEvent, useMemo, useState } from "react";
 import { getUsersColumns } from "./get-user-columns";
+import { Loader } from "@/components/shared/loader";
 
 export default function Users() {
-  const [userSearchInput, setUserSearchInput] = useState("");
+  const [userSearchInput, setUserSearchInput] = useState<
+    string | TherapyCenters
+  >("");
   const [therapistRole, setTherapistRole] = useState<SessionType>();
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
 
@@ -66,7 +70,7 @@ export default function Users() {
             <div className="relative max-w-md">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by therapist name, role..."
+                placeholder="Search by therapist name, role or center..."
                 className="pl-8"
                 value={userSearchInput}
                 onChange={handleSearchStudentInput}
@@ -81,11 +85,6 @@ export default function Users() {
               </Button>
             </DialogTrigger>
             <DialogContent>
-              <SelectTherapistRole
-                onSelectTherapistRole={(therapistRole) =>
-                  setTherapistRole(therapistRole)
-                }
-              />
               <AddTherapist
                 therapistRole={therapistRole}
                 setTherapistRole={setTherapistRole}
@@ -98,7 +97,7 @@ export default function Users() {
         {isAllTherapistsRefetching || isAllTherapistsLoading ? (
           <Loader />
         ) : isAllTherapistsError ? (
-          <Error<TherapistCreationResponse[]>
+          <Error<TherapistCreationResponseT[]>
             refetchData={refetchAllTherapists}
           />
         ) : (

@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { SessionType } from "@/types/attendance.type";
-import { Check, ChevronsUpDown, X } from "lucide-react";
+import { TherapyCenters } from "@/types/therapistType";
+import { Check, X } from "lucide-react";
 import * as React from "react";
 
 export type Option = {
@@ -18,6 +19,10 @@ export type Option = {
   value: string;
   therapistName: string;
   therapistRole: SessionType;
+  center: TherapyCenters;
+  phone: string;
+  therapistId: string;
+  email: string;
 };
 
 interface MultiSelectProps {
@@ -48,25 +53,23 @@ export function MultiSelect({
           role="combobox"
           type="button"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between h-10 overflow-x-auto overflow-y-hidden"
         >
-          <div className="flex gap-1 flex-wrap overflow-x-auto max-h-[2.5rem] items-center">
+          <div className="flex-1 min-w-0 whitespace-nowrap flex items-center gap-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             {selected.length > 0 ? (
               selected.map((option) => (
                 <Badge
                   key={option.value}
                   variant="secondary"
-                  className="mr-1 mb-1"
+                  className="inline-flex"
                 >
                   {option.label}
                   <button
                     type="button"
                     className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleUnselect(option);
-                      }
-                    }}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && handleUnselect(option)
+                    }
                     onMouseDown={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -81,7 +84,6 @@ export function MultiSelect({
               <span className="text-muted-foreground">{placeholder}</span>
             )}
           </div>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">

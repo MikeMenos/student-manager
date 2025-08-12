@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       message:
-        "The client has received their invitation and has 7 days to accept it.",
+        "The therapist has received their invitation and has 7 days to accept it.",
     });
   } catch (error) {
     return NextResponse.json({ error });

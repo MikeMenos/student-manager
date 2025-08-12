@@ -17,7 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AttendanceT } from "@/types/attendance.type";
-import { updateFormField, formatToDDMMYYYY } from "@/lib/helpers";
+import {
+  updateFormField,
+  formatToDDMMYYYY,
+  parseDDMMYYYYToDate,
+  toInputDateString,
+  parseInputDateString,
+} from "@/lib/helpers";
 import { useCreateAttendance } from "@/hooks/use-attendance";
 import { useUser } from "@clerk/nextjs";
 import { useGetAllTherapists } from "@/hooks/use-therapists";
@@ -37,6 +43,7 @@ type AttendanceFormProps = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isEdit?: boolean;
   setIsEdit?: Dispatch<SetStateAction<boolean>>;
+  selectedDate?: Date;
 };
 
 export default function AttendanceForm({
@@ -47,6 +54,7 @@ export default function AttendanceForm({
   setIsOpen,
   isEdit,
   setIsEdit,
+  selectedDate,
 }: AttendanceFormProps) {
   const { user } = useUser();
   const [form, setForm] = useState<AttendanceT>(initialSessionFormState);
@@ -80,6 +88,15 @@ export default function AttendanceForm({
   };
 
   useEffect(() => {
+    if (!formData && !isEdit) {
+      setForm(() => ({
+        ...form,
+        sessionDate: selectedDate as Date,
+      }));
+    }
+  }, [selectedDate]);
+
+  useEffect(() => {
     if (formData && isEdit) {
       setForm(formData);
     }
@@ -102,17 +119,18 @@ export default function AttendanceForm({
                 <Input
                   id="sessionDate"
                   type="date"
-                  value={
+                  value={toInputDateString(
                     form.sessionDate instanceof Date
-                      ? form.sessionDate.toISOString().split("T")[0]
-                      : form.sessionDate
-                  }
+                      ? form.sessionDate
+                      : parseDDMMYYYYToDate(form.sessionDate as string)
+                  )}
                   onChange={(e) =>
                     setForm(
                       updateFormField(
                         form,
                         "sessionDate",
-                        new Date(e.currentTarget.value)
+                        // keep Date in state
+                        parseInputDateString(e.currentTarget.value) as Date
                       )
                     )
                   }

@@ -11,3 +11,9 @@ export async function createAttendance(formData: AttendanceT) {
   };
   return response;
 }
+
+export async function deleteAttendance(id: string) {
+  return await axios.delete(`${BASE_URL}/api/attendance`, {
+    params: { id },
+  });
+}

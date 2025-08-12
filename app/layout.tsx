@@ -6,7 +6,7 @@ import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import { Providers } from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
-import { PROD_URL } from "@/lib/utils";
+import { APP_NAME, PROD_URL } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,11 +21,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(PROD_URL),
 
-  title: "Therapy Institution Manager",
+  title: APP_NAME,
   openGraph: {
-    title: "Therapy Institution Manager",
+    title: APP_NAME,
     url: PROD_URL,
-    siteName: "Therapy Institution Manager",
+    siteName: APP_NAME,
     images: "/images/logo.png",
     type: "website",
   },

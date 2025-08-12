@@ -8,16 +8,18 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { TherapistCreationResponse } from "@/types/therapistType";
-import { useDeleteClientFromClerk } from "@/hooks/use-therapists";
+import { TherapistCreationResponseT } from "@/types/therapistType";
+import { useDeleteClientFromClerkAndDb } from "@/hooks/use-therapists";
 
 export default function DeleteUserFromClerkAndDbButton({
   rowData,
 }: {
-  rowData: TherapistCreationResponse;
+  rowData: TherapistCreationResponseT;
 }) {
-  const { deleteUserFromClerkMutation, isDeleteUserFromClerkLoading } =
-    useDeleteClientFromClerk();
+  const {
+    deleteUserFromClerkAndDbMutation,
+    isDeleteUserFromClerkAndDbLoading,
+  } = useDeleteClientFromClerkAndDb();
 
   return (
     <Dialog>
@@ -37,14 +39,14 @@ export default function DeleteUserFromClerkAndDbButton({
           <Button
             variant="destructive"
             onClick={() =>
-              deleteUserFromClerkMutation({
+              deleteUserFromClerkAndDbMutation({
                 clerkUserId: rowData.therapistId,
                 dbUserId: rowData.id,
               })
             }
-            disabled={isDeleteUserFromClerkLoading}
+            disabled={isDeleteUserFromClerkAndDbLoading}
           >
-            {isDeleteUserFromClerkLoading ? "Deleting..." : "Yes, Delete"}
+            {isDeleteUserFromClerkAndDbLoading ? "Deleting..." : "Yes, Delete"}
           </Button>
         </DialogFooter>
       </DialogContent>

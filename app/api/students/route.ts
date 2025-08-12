@@ -2,48 +2,72 @@ import { NextResponse } from "next/server";
 import { StudentT } from "@/types/student.type";
 import prisma from "@/lib/prisma";
 import { capitalizeFirstLetter } from "@/lib/helpers";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { Prisma } from "@prisma/client";
 
 export async function GET(req: Request) {
   const { userId } = await auth();
-  if (!userId) return Response.json({ error: "Unauthorized" }, { status: 401 });
-  const { searchParams } = new URL(req.url);
-  const filter = searchParams.get("filter");
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  try {
+  const user = await currentUser();
+  const role = user?.publicMetadata?.role as string | undefined;
+
+  const { searchParams } = new URL(req.url);
+  const filter = (searchParams.get("filter") ?? "").trim();
+
+  const searchOr: Prisma.StudentWhereInput["OR"] = filter
+    ? [
+        { firstName: { contains: filter, mode: "insensitive" } },
+        { lastName: { contains: filter, mode: "insensitive" } },
+        { grade: { contains: filter, mode: "insensitive" } },
+        { age: { contains: filter, mode: "insensitive" } },
+        { center: { contains: filter, mode: "insensitive" } },
+        {
+          parentInfo: {
+            some: {
+              OR: [
+                { parentName: { contains: filter, mode: "insensitive" } },
+                { email: { contains: filter, mode: "insensitive" } },
+              ],
+            },
+          },
+        },
+      ]
+    : undefined;
+
+  // If admin → return all students without altering attendances
+  if (role === "admin") {
     const students = await prisma.student.findMany({
-      where: filter
-        ? {
-            OR: [
-              { firstName: { contains: filter, mode: "insensitive" } },
-              { lastName: { contains: filter, mode: "insensitive" } },
-              { grade: { contains: filter, mode: "insensitive" } },
-              { age: { contains: filter, mode: "insensitive" } },
-              { center: { contains: filter, mode: "insensitive" } },
-              {
-                parentInfo: {
-                  some: {
-                    OR: [
-                      { parentName: { contains: filter, mode: "insensitive" } },
-                      { email: { contains: filter, mode: "insensitive" } },
-                    ],
-                  },
-                },
-              },
-            ],
-          }
-        : undefined,
+      where: searchOr ? { OR: searchOr } : undefined,
       include: {
         parentInfo: true,
         attendances: true,
         therapists: true,
       },
     });
-
     return NextResponse.json({ students });
-  } catch (error) {
-    return NextResponse.json({ error });
   }
+
+  // For non-admin → filter students and only include attendances related to this therapist
+  const students = await prisma.student.findMany({
+    where: {
+      therapists: { some: { therapistId: userId } }, // Student has this therapist
+      ...(searchOr ? { OR: searchOr } : {}),
+    },
+    include: {
+      parentInfo: true,
+      attendances: {
+        where: { therapistId: userId }, // Direct filter using Clerk ID
+      },
+      therapists: {
+        where: { therapistId: userId },
+      },
+    },
+  });
+
+  return NextResponse.json({ students });
 }
 
 export async function POST(req: Request) {

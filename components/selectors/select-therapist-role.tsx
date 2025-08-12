@@ -24,7 +24,7 @@ export default function SelectTherapistRole({
       value={value}
     >
       <SelectTrigger>
-        <SelectValue placeholder="Select therapist role" />
+        <SelectValue placeholder="Select role" />
       </SelectTrigger>
       <SelectContent>
         {sessionTypeOptions.map((sessionType) => (

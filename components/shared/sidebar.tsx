@@ -14,8 +14,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import {
-  BookOpen,
   GraduationCap,
+  LayoutDashboard,
   LogOut,
   Settings,
   Speech,
@@ -25,10 +25,10 @@ import { usePathname } from "next/navigation";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { cn, SIGN_IN_PATH } from "@/lib/utils";
+import { SIGN_IN_PATH } from "@/lib/utils";
 
 const menuItems = [
-  { title: "Classes", icon: BookOpen, url: "/" },
+  { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
   { title: "Therapists", icon: Speech, url: "/therapists" },
   { title: "Students", icon: Users, url: "/students" },
   { title: "Settings", icon: Settings, url: "#" },
@@ -39,7 +39,14 @@ export default function Sidebar() {
   const pathname = usePathname();
   const { isSignedIn, user } = useUser();
 
+  const role = (user?.publicMetadata?.role as string) || "";
+
   if (!isSignedIn) return null;
+
+  const isAdmin = role === "admin";
+  const filteredTabItems = isAdmin
+    ? menuItems
+    : menuItems.filter((item) => item.title !== "Therapists");
 
   return (
     <SidebarShadcn collapsible="icon">
@@ -52,13 +59,14 @@ export default function Sidebar() {
           </div>
         )}
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {menuItems.map((item, idx) => (
-                <SidebarMenuItem key={idx}>
+              {filteredTabItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
                     <Link href={item.url}>
                       <item.icon />
@@ -67,6 +75,7 @@ export default function Sidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+
               <SidebarMenuItem className="cursor-pointer">
                 <SidebarMenuButton asChild>
                   <SignOutButton redirectUrl={`${SIGN_IN_PATH}`}>
@@ -81,12 +90,13 @@ export default function Sidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
       <SidebarFooter className="border-t">
         {!open && (
           <Avatar className="h-8 w-8 mx-auto">
             <AvatarFallback>
-              {user?.firstName?.split("")[0]}
-              {user?.lastName?.split("")[0]}
+              {user?.firstName?.[0]}
+              {user?.lastName?.[0]}
             </AvatarFallback>
           </Avatar>
         )}
@@ -94,8 +104,8 @@ export default function Sidebar() {
           <div className="flex items-center gap-2 px-4 py-2">
             <Avatar className="h-8 w-8">
               <AvatarFallback>
-                {user?.firstName?.split("")[0]}
-                {user?.lastName?.split("")[0]}
+                {user?.firstName?.[0]}
+                {user?.lastName?.[0]}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">

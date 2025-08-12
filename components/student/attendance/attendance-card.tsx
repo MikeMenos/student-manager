@@ -15,6 +15,9 @@ export function AttendanceContent({
   studentId,
 }: AttendanceContentProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    new Date()
+  );
   return (
     <Card>
       <AttendanceCardHeader
@@ -22,11 +25,14 @@ export function AttendanceContent({
         studentId={studentId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        selectedDate={selectedDate}
       />
       <AttendanceCardContent
         studentId={studentId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
     </Card>
   );

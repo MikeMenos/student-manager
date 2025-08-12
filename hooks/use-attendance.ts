@@ -1,5 +1,5 @@
 import { errorToast, successToast } from "@/components/shared/toasts";
-import { createAttendance } from "@/lib/api/attendance/api";
+import { createAttendance, deleteAttendance } from "@/lib/api/attendance/api";
 import { STUDENT_QUERY_KEY, STUDENTS_QUERY_KEY } from "@/lib/utils";
 import { AttendanceT } from "@/types/attendance.type";
 
@@ -29,4 +29,28 @@ export const useCreateAttendance = () => {
     },
   });
   return { createAttendanceMutation, isCreateAttendanceLoading };
+};
+
+export const useDeleteAttendance = () => {
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: deleteAttendanceMutation,
+    isPending: isDeleteAttendanceLoading,
+  } = useMutation({
+    mutationFn: async (id: string) => await deleteAttendance(id),
+    onSuccess: (data) => {
+      successToast(data.data.message);
+      queryClient.invalidateQueries({
+        queryKey: [STUDENT_QUERY_KEY],
+      });
+    },
+    onError: ({ message }: { message: string }) => {
+      errorToast(message);
+    },
+  });
+  return {
+    deleteAttendanceMutation,
+    isDeleteAttendanceLoading,
+  };
 };

@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export const APP_NAME = "Therapy Institution Manager";
 export const PROD_URL = "https://www.menoscodes.gr";
 export const DEV_URL =
   "https://therapy-institution-manager-development.up.railway.app";
@@ -14,7 +16,6 @@ export const BASE_URL =
     : process.env.NEXT_PUBLIC_RAILWAY_ENVIRONMENT_NAME === "development"
     ? DEV_URL
     : "http://localhost:3000";
-console.log(process.env.NEXT_PUBLIC_RAILWAY_ENVIRONMENT_NAME);
 export const SIGN_UP_PATH = "/sign-up";
 export const SIGN_IN_PATH = "/sign-in";
 

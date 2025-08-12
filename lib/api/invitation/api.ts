@@ -2,10 +2,15 @@ import { BASE_URL, SIGN_UP_PATH } from "@/lib/utils";
 import { SessionType } from "@/types/attendance.type";
 import axios from "axios";
 
-export async function addTherapist(email: string, therapistRole: SessionType) {
+export async function addTherapist(
+  email: string,
+  therapistRole: SessionType,
+  center: string,
+  phone: string
+) {
   const payload = {
     email_address: email,
-    public_metadata: { therapistRole },
+    public_metadata: { therapistRole, center, phone },
     redirect_url: `${BASE_URL}${SIGN_UP_PATH}`,
     notify: true,
     ignore_existing: false,

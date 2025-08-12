@@ -1,5 +1,5 @@
 import { AttendanceT } from "./attendance.type";
-import { TherapistT } from "./therapistType";
+import { TherapistCreationResponseT } from "./therapistType";
 
 export type ParentInfoT = {
   id?: string;
@@ -20,5 +20,5 @@ export type StudentT = {
   center: string;
   attendances?: AttendanceT[];
   parentInfo: ParentInfoT[];
-  therapists?: TherapistT[];
+  therapists?: TherapistCreationResponseT[];
 };

@@ -15,6 +15,12 @@ enum SessionType {
   Behavioral
 }
 
+enum TherapyCenters {
+  Patras
+  Amaliada
+  Aigio
+}
+
 model Student {
   id          String       @id @default(uuid())
   firstName   String
@@ -30,13 +36,17 @@ model Student {
 }
 
 model Therapist {
-  id            String       @id @default(uuid())
-  therapistId   String // Clerk ID
+  id            String         @id @default(uuid())
+  therapistId   String         @unique
   therapistRole SessionType
   therapistName String
   email         String
-  students      Student[]    @relation("StudentTherapists")
-  attendances   Attendance[]
+  phone         String
+  center        TherapyCenters
+
+  attendances Attendance[] @relation("TherapistByClerkId")
+
+  students Student[] @relation("StudentTherapists")
 }
 
 model Attendance {
@@ -48,8 +58,9 @@ model Attendance {
   studentId   String
   therapistId String
 
-  student   Student   @relation(fields: [studentId], references: [id])
-  therapist Therapist @relation(fields: [therapistId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  therapist Therapist @relation("TherapistByClerkId", fields: [therapistId], references: [therapistId])
 
   @@index([studentId, sessionDate])
   @@index([therapistId])

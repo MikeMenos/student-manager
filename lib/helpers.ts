@@ -1,3 +1,5 @@
+import { format, parse } from "date-fns";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function updateFormField<T>(form: T, path: string, value: any): T {
   const keys = path.replace(/\[(\d+)\]/g, ".$1").split(".");
@@ -32,3 +34,22 @@ export function formatToDDMMYYYY(dateInput: string | Date): string {
   const year = date.getFullYear();
   return `${day}-${month}-${year}`;
 }
+
+export const parseDDMMYYYYToDate = (s?: string): Date | null => {
+  if (!s) return null;
+  const d = parse(s, "dd-MM-yyyy", new Date());
+  return isNaN(d.getTime()) ? null : d;
+};
+
+// Date -> "yyyy-MM-dd" (for <input type="date">)
+export const toInputDateString = (d?: Date | null): string => {
+  if (!d || isNaN(d.getTime())) return "";
+  return format(d, "yyyy-MM-dd");
+};
+
+// "yyyy-MM-dd" (from input) -> Date
+export const parseInputDateString = (s: string): Date | null => {
+  if (!s) return null;
+  const d = parse(s, "yyyy-MM-dd", new Date());
+  return isNaN(d.getTime()) ? null : d;
+};
