@@ -1,9 +1,9 @@
-// app/(whatever)/dashboard/page.tsx (or your current file)
 "use client";
 
 import AdminTiles from "@/components/dashboard/admin-tiles";
 import NonAdminTiles from "@/components/dashboard/non-admin-tiles";
 import { WelcomeHeader } from "@/components/dashboard/welcome-header";
+import { Loader } from "@/components/shared/loader";
 import {
   SIDEBAR_WIDTH,
   SIDEBAR_WIDTH_ICON,
@@ -16,8 +16,10 @@ import { useUser } from "@clerk/nextjs";
 export default function Dashboard() {
   const { state } = useSidebar();
   const isMobile = useIsMobile();
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const role = (user?.publicMetadata?.role as string) || "";
+
+  if (!isSignedIn) return <Loader />;
 
   return (
     <>

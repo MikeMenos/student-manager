@@ -20,6 +20,7 @@ export default function NonAdminTiles({
   if (!therapistId) return <Loader />;
   if (isSingleTherapistLoading) return <Loader />;
   if (isSingleTherapistError) return <Error />;
+
   const attendances = singleTherapist?.attendances ?? [];
   const thisMonth = new Date();
   const lastMonth = subMonths(thisMonth, 1);
@@ -112,6 +113,9 @@ export default function NonAdminTiles({
           <div className="flex items-center justify-between">
             <CardTitle className="text-base font-semibold">
               Total Students
+              <p className="text-muted-foreground text-xs mt-2 opacity-0">
+                Current month
+              </p>
             </CardTitle>
             <Users className="h-5 w-5 text-purple-600" />
           </div>

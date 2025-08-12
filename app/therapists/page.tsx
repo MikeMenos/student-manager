@@ -23,6 +23,7 @@ import { Plus, Search } from "lucide-react";
 import { ChangeEvent, useMemo, useState } from "react";
 import { getUsersColumns } from "./get-user-columns";
 import { Loader } from "@/components/shared/loader";
+import { useUser } from "@clerk/nextjs";
 
 export default function Users() {
   const [userSearchInput, setUserSearchInput] = useState<
@@ -31,6 +32,7 @@ export default function Users() {
   const [therapistRole, setTherapistRole] = useState<SessionType>();
   const [isStudentFormOpen, setIsStudentFormOpen] = useState(false);
 
+  const { isSignedIn } = useUser();
   const { state } = useSidebar();
   const isMobile = useIsMobile();
   const columns = useMemo(() => getUsersColumns(), []);
@@ -49,6 +51,8 @@ export default function Users() {
   const handleSearchStudentInput = (e: ChangeEvent<HTMLInputElement>) => {
     setUserSearchInput(e.target.value);
   };
+
+  if (!isSignedIn) return <Loader />;
 
   return (
     <>

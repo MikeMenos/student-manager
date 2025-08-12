@@ -33,6 +33,7 @@ export const useGetSingleTherapist = (therapistId: string) => {
     queryKey: [THERAPIST_QUERY_KEY, therapistId],
     queryFn: () => getSingleTherapist(therapistId),
     enabled: !!therapistId,
+    staleTime: 0,
   });
 
   return {

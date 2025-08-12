@@ -151,8 +151,10 @@ export default function AttendanceCardContent({
                         {attendance.sessionDuration}
                       </span>
                       <span className="text-gray-600">
-                        hours with {singleStudent.firstName}{" "}
-                        {singleStudent.lastName}
+                        hours with{" "}
+                        <span className="font-semibold">
+                          {singleStudent.firstName} {singleStudent.lastName}
+                        </span>
                       </span>
                     </div>
                     {role === "admin" &&

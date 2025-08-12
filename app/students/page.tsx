@@ -33,7 +33,7 @@ export default function StudentsPage() {
   const isGradeFilter = filter === "all" || centerValues.includes(filter);
   const debounceDelay = isGradeFilter ? 0 : 800;
 
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const { state } = useSidebar();
   const isMobile = useIsMobile();
   const debouncedFilter = useDebounce(filter, debounceDelay);
@@ -54,6 +54,8 @@ export default function StudentsPage() {
   };
 
   const role = (user?.publicMetadata?.role as string) || "";
+
+  if (!isSignedIn) return <Loader />;
 
   return (
     <>
