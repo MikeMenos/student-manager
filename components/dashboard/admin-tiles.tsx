@@ -28,7 +28,7 @@ export default function AdminTiles() {
       <TileCardWrapper>
         <CardHeader className="p-6 pb-0">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-semibold">
+            <CardTitle className="text-xl font-semibold">
               Total Students
             </CardTitle>
             <Users className="h-5 w-5 text-purple-600" />
@@ -43,7 +43,7 @@ export default function AdminTiles() {
       <TileCardWrapper>
         <CardHeader className="p-6 pb-0">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-semibold">
+            <CardTitle className="text-xl font-semibold">
               Total Therapists
             </CardTitle>
             <Speech className="h-5 w-5 text-purple-600" />

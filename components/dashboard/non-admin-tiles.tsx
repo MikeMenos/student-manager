@@ -52,7 +52,7 @@ export default function NonAdminTiles({
       <TileCardWrapper>
         <CardHeader className="p-6 pb-0">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-semibold">
+            <CardTitle className="text-xl font-semibold">
               Total hours —{" "}
               <span className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 px-2 py-0.5 text-xs">
                 {format(thisMonth, "MMMM")}
@@ -89,7 +89,7 @@ export default function NonAdminTiles({
       <TileCardWrapper>
         <CardHeader className="p-6 pb-0">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-semibold">
+            <CardTitle className="text-xl font-semibold">
               Total hours —{" "}
               <span className="inline-flex items-center rounded-full bg-zinc-100 text-zinc-700 px-2 py-0.5 text-xs">
                 {format(lastMonth, "MMMM")}
