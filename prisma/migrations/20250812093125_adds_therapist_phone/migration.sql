@@ -20,7 +20,7 @@ ALTER TABLE "public"."Therapist"
 
 -- 2) Backfill existing NULLs to valid values
 --    Pick a sensible default center; adjust if needed
-UPDATE "public"."Therapist" SET "center" = '' WHERE "center" IS NULL;
+UPDATE "public"."Therapist" SET "center" = 'Patras' WHERE "center" IS NULL;
 UPDATE "public"."Therapist" SET "phone"  = ''       WHERE "phone"  IS NULL;
 
 -- 3) Now enforce NOT NULL and make email optional
