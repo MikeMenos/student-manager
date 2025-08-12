@@ -1,4 +1,3 @@
-// app/api/students/[id]/route.ts
 import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
