@@ -114,6 +114,7 @@ function SidebarProvider({
     if (openMobile) {
       setOpenMobile(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
