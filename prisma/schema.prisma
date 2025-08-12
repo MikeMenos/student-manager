@@ -22,17 +22,17 @@ enum TherapyCenters {
 }
 
 model Student {
-  id          String         @id @default(uuid())
+  id          String       @id @default(uuid())
   firstName   String
   lastName    String
   age         String
   grade       String
   homeAddress String
   school      String
-  center      TherapyCenters
+  center      String
   parentInfo  ParentInfo[]
   attendances Attendance[]
-  therapists  Therapist[]    @relation("StudentTherapists")
+  therapists  Therapist[]  @relation("StudentTherapists")
 }
 
 model Therapist {
