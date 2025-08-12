@@ -94,6 +94,7 @@ export default function AttendanceForm({
         sessionDate: selectedDate as Date,
       }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate]);
 
   useEffect(() => {
