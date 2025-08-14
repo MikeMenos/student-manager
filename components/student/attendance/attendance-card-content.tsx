@@ -116,9 +116,9 @@ export default function AttendanceCardContent({
               singleStudent.attendances.length > 0 ? (
               singleStudent.attendances.map((attendance) => (
                 <TileCardWrapper key={attendance.id}>
-                  <div className="p-6">
+                  <div className="p-3 md:p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex gap-2 items-center">
+                      <div className="flex gap-2 items-center justify-center">
                         <h2 className="text-xl font-semibold">
                           Session Duration
                         </h2>
