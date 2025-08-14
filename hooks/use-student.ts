@@ -20,6 +20,7 @@ export const useGetAllStudents = ({
   const { data, isLoading, isError, refetch, isRefetching } = useQuery({
     queryKey: [STUDENTS_QUERY_KEY, offset, filter],
     queryFn: () => getAllStudents(filter),
+    staleTime: 0,
   });
 
   return {
