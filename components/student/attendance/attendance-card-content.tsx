@@ -145,7 +145,7 @@ export default function AttendanceCardContent({
                     </div>
                   </div>
 
-                  <CardContent className="p-6 flex items-end justify-between">
+                  <CardContent className="p-3 md:p-6 flex items-end justify-between">
                     <div className="flex items-baseline">
                       <span className="text-5xl font-bold mr-2">
                         {attendance.sessionDuration}
