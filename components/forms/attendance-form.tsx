@@ -185,7 +185,7 @@ export default function AttendanceForm({
               Cancel
             </Button>
             <Button disabled={isCreateAttendanceLoading} type="submit">
-              Add Session
+              {isEdit ? "Edit Session" : "Add Session"}
             </Button>
           </DialogFooter>
         </form>
