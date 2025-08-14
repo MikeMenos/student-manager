@@ -119,6 +119,7 @@ export default function AttendanceForm({
                 <Label htmlFor="sessionDate">Date</Label>
                 <Input
                   id="sessionDate"
+                  autoFocus={false}
                   type="date"
                   value={toInputDateString(
                     form.sessionDate instanceof Date
