@@ -49,11 +49,11 @@ export default async function RootLayout({
             <Toaster
               toastOptions={{
                 success: {
-                  duration: 3000,
+                  duration: 4000,
                   style: { padding: "1rem" },
                 },
                 error: {
-                  duration: 3000,
+                  duration: 4000,
                   style: { padding: "1rem" },
                 },
                 position: "bottom-center",

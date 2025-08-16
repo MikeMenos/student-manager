@@ -2,26 +2,26 @@
 
 import TileCardWrapper from "@/components/shared/tile-card-wrapper";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetSingleTherapist } from "@/hooks/use-therapists";
 import { format, parse, subMonths } from "date-fns";
-import { Clock, TrendingDown, TrendingUp, Users } from "lucide-react";
+import { Clock, TrendingDown, TrendingUp } from "lucide-react";
 import React from "react";
 import { Loader } from "../shared/loader";
 import Error from "../shared/error";
+import { useGetSingleStudent } from "@/hooks/use-student";
 
-export default function NonAdminTiles({
-  therapistId,
+export default function AttendanceContent({
+  studentId,
 }: {
-  therapistId: string;
+  studentId: string;
 }) {
-  const { singleTherapist, isSingleTherapistLoading, isSingleTherapistError } =
-    useGetSingleTherapist(therapistId);
+  const { singleStudent, isSingleStudentLoading, isSingleStudentError } =
+    useGetSingleStudent(studentId, undefined);
 
-  if (!therapistId) return <Loader />;
-  if (isSingleTherapistLoading) return <Loader />;
-  if (isSingleTherapistError) return <Error />;
+  if (!studentId) return <Loader />;
+  if (isSingleStudentLoading) return <Loader />;
+  if (isSingleStudentError) return <Error />;
 
-  const sessions = singleTherapist?.sessions ?? [];
+  const sessions = singleStudent?.sessions ?? [];
   const thisMonth = new Date();
   const lastMonth = subMonths(thisMonth, 1);
 
@@ -48,7 +48,7 @@ export default function NonAdminTiles({
       : `${delta > 0 ? "+" : ""}${delta}h vs last month`;
 
   return (
-    <div className="grid md:grid-cols-3 gap-6 mb-12">
+    <div className="grid md:grid-cols-2 gap-6 mb-12">
       {/* This month */}
       <TileCardWrapper>
         <CardHeader className="p-6 pb-0">
@@ -104,26 +104,6 @@ export default function NonAdminTiles({
         </CardHeader>
         <CardContent className="p-6 pt-4">
           <span className="text-5xl font-bold">{lastMonthHours}</span>
-        </CardContent>
-      </TileCardWrapper>
-
-      {/* Total students */}
-      <TileCardWrapper>
-        <CardHeader className="p-6 pb-0">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-base font-semibold">
-              Total Students
-              <p className="text-muted-foreground text-xs mt-2 opacity-0">
-                Current month
-              </p>
-            </CardTitle>
-            <Users className="h-5 w-5 text-purple-600" />
-          </div>
-        </CardHeader>
-        <CardContent className="p-6 pt-4">
-          <span className="text-5xl font-bold">
-            {singleTherapist?.students?.length ?? 0}
-          </span>
         </CardContent>
       </TileCardWrapper>
     </div>

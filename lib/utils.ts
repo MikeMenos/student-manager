@@ -1,4 +1,4 @@
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 

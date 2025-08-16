@@ -4,11 +4,12 @@ export type SessionType =
   | "Speech"
   | "Behavioral";
 
-export type AttendanceT = {
+export type SessionT = {
   id?: string;
   sessionDate: Date | string;
   studentId?: string;
   therapistId?: string;
   sessionType: SessionType;
   sessionDuration: number;
+  sessionNotes: string;
 };

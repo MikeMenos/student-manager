@@ -1,8 +1,8 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import AttendanceCardContent from "./attendance-card-content";
-import AttendanceCardHeader from "./attendance-card-header";
+import SessionCardContent from "./session-card-content";
+import SessionCardHeader from "./session-card-header";
 import { useState } from "react";
 
 type AttendanceContentProps = {
@@ -10,7 +10,7 @@ type AttendanceContentProps = {
   studentId: string;
 };
 
-export function AttendanceContent({
+export function SessionsContent({
   studentName,
   studentId,
 }: AttendanceContentProps) {
@@ -20,14 +20,14 @@ export function AttendanceContent({
   );
   return (
     <Card>
-      <AttendanceCardHeader
+      <SessionCardHeader
         studentName={studentName}
         studentId={studentId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         selectedDate={selectedDate}
       />
-      <AttendanceCardContent
+      <SessionCardContent
         studentId={studentId}
         isOpen={isOpen}
         setIsOpen={setIsOpen}

@@ -20,14 +20,14 @@ export async function GET(req: NextRequest) {
       where: { id },
       include: {
         parentInfo: true,
-        attendances: {
+        sessions: {
           where: {
             ...(sessionDate ? { sessionDate } : {}),
-            ...(role !== "admin" ? { therapistId: userId } : {}), // Filter by current therapist if not admin
+            ...(role !== "admin" ? { therapistId: userId } : {}),
           },
         },
         therapists:
-          role === "admin" ? true : { where: { therapistId: userId } }, // Limit therapists array too if needed
+          role === "admin" ? true : { where: { therapistId: userId } },
       },
     });
 

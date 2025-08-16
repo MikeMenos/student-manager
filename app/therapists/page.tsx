@@ -14,7 +14,7 @@ import {
 import { useDebounce } from "@/hooks/use-debounce";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useGetAllTherapists } from "@/hooks/use-therapists";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import {
   TherapistCreationResponseT,
   TherapyCenters,

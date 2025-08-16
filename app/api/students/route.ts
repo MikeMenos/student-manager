@@ -37,20 +37,20 @@ export async function GET(req: Request) {
       ]
     : undefined;
 
-  // If admin → return all students without altering attendances
+  // If admin → return all students without altering sessions
   if (role === "admin") {
     const students = await prisma.student.findMany({
       where: searchOr ? { OR: searchOr } : undefined,
       include: {
         parentInfo: true,
-        attendances: true,
+        sessions: true,
         therapists: true,
       },
     });
     return NextResponse.json({ students });
   }
 
-  // For non-admin → filter students and only include attendances related to this therapist
+  // For non-admin → filter students and only include sessions related to this therapist
   const students = await prisma.student.findMany({
     where: {
       therapists: { some: { therapistId: userId } }, // Student has this therapist
@@ -58,7 +58,7 @@ export async function GET(req: Request) {
     },
     include: {
       parentInfo: true,
-      attendances: {
+      sessions: {
         where: { therapistId: userId }, // Direct filter using Clerk ID
       },
       therapists: {

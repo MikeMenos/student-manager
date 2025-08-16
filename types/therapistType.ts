@@ -1,4 +1,4 @@
-import { AttendanceT, SessionType } from "./attendance.type";
+import { SessionT, SessionType } from "./session.type";
 import { StudentT } from "./student.type";
 
 export type TherapistCreationResponseT = {
@@ -9,7 +9,7 @@ export type TherapistCreationResponseT = {
   email: string;
   phone: string;
   therapistRole: SessionType;
-  attendances?: AttendanceT[];
+  sessions?: SessionT[];
   students?: StudentT[];
 };
 

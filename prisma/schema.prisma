@@ -31,7 +31,7 @@ model Student {
   school      String
   center      String
   parentInfo  ParentInfo[]
-  attendances Attendance[]
+  sessions    Session[]
   therapists  Therapist[]  @relation("StudentTherapists")
 }
 
@@ -44,16 +44,17 @@ model Therapist {
   phone         String
   center        TherapyCenters
 
-  attendances Attendance[] @relation("TherapistByClerkId")
+  sessions Session[] @relation("TherapistByClerkId")
 
   students Student[] @relation("StudentTherapists")
 }
 
-model Attendance {
+model Session {
   id              String      @id @default(uuid())
   sessionDate     String
   sessionType     SessionType
   sessionDuration Int
+  sessionNotes    String
 
   studentId   String
   therapistId String

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useInviteTherapist } from "@/hooks/use-invitation";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import SelectCenter from "./selectors/select-center";
 import SelectTherapistRole from "./selectors/select-therapist-role";

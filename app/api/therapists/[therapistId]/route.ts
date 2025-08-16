@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   try {
     const therapist = await prisma.therapist.findUnique({
       where: { therapistId },
-      include: { attendances: true, students: true },
+      include: { sessions: true, students: true },
     });
 
     if (!therapist) {

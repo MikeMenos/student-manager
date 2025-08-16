@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import { TherapyCenters } from "@/types/therapistType";
 
 export async function POST(req: NextRequest) {

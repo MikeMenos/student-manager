@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { sessionTypeOptions } from "@/lib/utils";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 
 export default function SelectTherapistRole({
   onSelectTherapistRole,

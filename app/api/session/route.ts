@@ -1,6 +1,6 @@
 import { formatToDDMMYYYY } from "@/lib/helpers";
 import prisma from "@/lib/prisma";
-import { AttendanceT } from "@/types/attendance.type";
+import { SessionT } from "@/types/session.type";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const formData: AttendanceT = await req.json();
+    const formData: SessionT = await req.json();
 
     if (!formData.studentId) {
       return NextResponse.json(
@@ -39,12 +39,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
     }
 
+    const duration = Number(formData.sessionDuration);
+    if (!formData.sessionDuration || isNaN(duration)) {
+      return NextResponse.json(
+        { message: "Duration duration must be a valid number" },
+        { status: 400 }
+      );
+    }
+
     const sessionDate = formatToDDMMYYYY(formData.sessionDate as string | Date);
 
-    let attendance;
+    let session;
 
     if (formData.id) {
-      const existing = await prisma.attendance.findUnique({
+      const existing = await prisma.session.findUnique({
         where: { id: formData.id },
       });
       if (!existing) {
@@ -57,43 +65,45 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Forbidden" }, { status: 403 });
       }
 
-      attendance = await prisma.attendance.update({
+      session = await prisma.session.update({
         where: { id: formData.id },
         data: {
           sessionDate,
           studentId: formData.studentId,
           therapistId: therapist.therapistId,
           sessionType: formData.sessionType!,
-          sessionDuration: Number(formData.sessionDuration),
+          sessionDuration: duration,
+          sessionNotes: formData.sessionNotes,
         },
         include: { student: true, therapist: true },
       });
 
       return NextResponse.json(
-        { data: attendance, message: "Attendance updated successfully" },
+        { data: session, message: "Attendance updated successfully" },
         { status: 200 }
       );
     } else {
-      attendance = await prisma.attendance.create({
+      session = await prisma.session.create({
         data: {
           sessionDate,
           studentId: formData.studentId,
           therapistId: therapist.therapistId,
           sessionType: formData.sessionType!,
-          sessionDuration: Number(formData.sessionDuration),
+          sessionDuration: duration,
+          sessionNotes: formData.sessionNotes,
         },
         include: { student: true, therapist: true },
       });
 
       return NextResponse.json(
-        { data: attendance, message: "Attendance added successfully" },
+        { data: session, message: "Attendance added successfully" },
         { status: 201 }
       );
     }
   } catch (error) {
     console.error("Attendance POST error:", error);
     return NextResponse.json(
-      { message: "Failed to save attendance" },
+      { message: "Failed to save session" },
       { status: 500 }
     );
   }
@@ -113,7 +123,7 @@ export async function DELETE(req: Request) {
     }
 
     // Optional: Check ownership before deleting
-    const existing = await prisma.attendance.findUnique({ where: { id } });
+    const existing = await prisma.session.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json(
         { message: "Attendance not found" },
@@ -124,13 +134,13 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    await prisma.attendance.delete({ where: { id } });
+    await prisma.session.delete({ where: { id } });
 
     return NextResponse.json({ message: "Attendance deleted" });
   } catch (error) {
     console.error("Attendance DELETE error:", error);
     return NextResponse.json(
-      { message: "Failed to delete attendance" },
+      { message: "Failed to delete session" },
       { status: 500 }
     );
   }

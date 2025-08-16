@@ -152,7 +152,7 @@ export default function StudentForm({
               <Plus className="h-4 w-4" />
             )}
 
-            {selectedStudent ? `Edit` : "Add Students"}
+            {selectedStudent ? `Edit` : "Add Student"}
           </Button>
         </DialogTrigger>
       )}

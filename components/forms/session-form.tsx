@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useCreateAttendance } from "@/hooks/use-attendance";
+import { useCreateSession } from "@/hooks/use-session";
 import { useGetAllTherapists } from "@/hooks/use-therapists";
 import {
   formatToDDMMYYYY,
@@ -18,7 +18,7 @@ import {
   toInputDateString,
   updateFormField,
 } from "@/lib/helpers";
-import { AttendanceT } from "@/types/attendance.type";
+import { SessionT } from "@/types/session.type";
 import { useUser } from "@clerk/nextjs";
 import {
   Dispatch,
@@ -27,18 +27,20 @@ import {
   useEffect,
   useState,
 } from "react";
+import { Textarea } from "../ui/textarea";
 
-export const initialSessionFormState: AttendanceT = {
+export const initialSessionFormState: SessionT = {
   sessionDate: new Date(),
   sessionType: "Occupational",
   sessionDuration: 1,
   therapistId: "",
+  sessionNotes: "",
 };
 
 type AttendanceFormProps = {
   studentId: string;
   studentName: string;
-  formData?: AttendanceT;
+  formData?: SessionT;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isEdit?: boolean;
@@ -46,7 +48,7 @@ type AttendanceFormProps = {
   selectedDate?: Date;
 };
 
-export default function AttendanceForm({
+export default function SessionForm({
   studentId,
   studentName,
   formData,
@@ -57,10 +59,9 @@ export default function AttendanceForm({
   selectedDate,
 }: AttendanceFormProps) {
   const { user } = useUser();
-  const [form, setForm] = useState<AttendanceT>(initialSessionFormState);
+  const [form, setForm] = useState<SessionT>(initialSessionFormState);
 
-  const { createAttendanceMutation, isCreateAttendanceLoading } =
-    useCreateAttendance();
+  const { createSessionMutation, isCreateSessionLoading } = useCreateSession();
   const { allTherapists } = useGetAllTherapists({
     filter: "",
   });
@@ -77,7 +78,7 @@ export default function AttendanceForm({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createAttendanceMutation(
+    createSessionMutation(
       {
         ...form,
         studentId,
@@ -163,7 +164,7 @@ export default function AttendanceForm({
                       updateFormField(
                         form,
                         "sessionDuration",
-                        Number(e.currentTarget.value)
+                        e.currentTarget.value
                       )
                     )
                   }
@@ -179,13 +180,25 @@ export default function AttendanceForm({
                 />
               </div>
             </div>
+            <div className="grid gap-2">
+              <Label htmlFor="sessionNotes">Notes</Label>
+              <Textarea
+                id="sessionNotes"
+                value={form.sessionNotes}
+                onChange={(e) =>
+                  setForm(
+                    updateFormField(form, "sessionNotes", e.currentTarget.value)
+                  )
+                }
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={handleOnClose} type="button">
               Cancel
             </Button>
-            <Button disabled={isCreateAttendanceLoading} type="submit">
-              {isEdit ? "Edit Session" : "Add Session"}
+            <Button disabled={isCreateSessionLoading} type="submit">
+              {isEdit ? "Save" : "Add"}
             </Button>
           </DialogFooter>
         </form>

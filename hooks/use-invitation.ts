@@ -1,6 +1,6 @@
 import { errorToast, successToast } from "@/components/shared/toasts";
 import { addTherapist } from "@/lib/api/invitation/api";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import { useMutation } from "@tanstack/react-query";
 
 export const useInviteTherapist = (

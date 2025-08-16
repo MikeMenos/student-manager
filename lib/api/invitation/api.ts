@@ -1,5 +1,5 @@
 import { BASE_URL, SIGN_UP_PATH } from "@/lib/utils";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import axios from "axios";
 
 export async function addTherapist(

@@ -2,7 +2,7 @@ import { useGetSingleStudent } from "@/hooks/use-student";
 import { StudentT } from "@/types/student.type";
 import { Building } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
-import { AttendanceContent } from "./attendance/attendance-card";
+
 import DeleteStudent from "./delete-student";
 import StudentForm from "../forms/student-form";
 import Error from "../shared/error";
@@ -12,6 +12,8 @@ import RelationsContent from "./relations-content";
 import { useUser } from "@clerk/nextjs";
 import TherapistContent from "./therapists-content";
 import { Loader } from "../shared/loader";
+import { SessionsContent } from "./session/session-card";
+import AttendanceContent from "./attendance-content";
 
 export default function StudentDetails({
   studentId,
@@ -77,6 +79,7 @@ export default function StudentDetails({
             {role === "admin" && (
               <TabsTrigger value="therapists">Therapists</TabsTrigger>
             )}
+            <TabsTrigger value="sessions">Sessions</TabsTrigger>
             <TabsTrigger value="attendance">Attendance</TabsTrigger>
             <TabsTrigger value="files">Files</TabsTrigger>
             {role === "admin" && (
@@ -86,11 +89,14 @@ export default function StudentDetails({
           <TabsContent value="Relations" className="space-y-4">
             <RelationsContent singleStudent={singleStudent} />
           </TabsContent>
-          <TabsContent value="attendance" className="space-y-4">
-            <AttendanceContent
+          <TabsContent value="sessions" className="space-y-4">
+            <SessionsContent
               studentName={`${singleStudent.firstName} ${singleStudent.lastName}`}
               studentId={studentId}
             />
+          </TabsContent>
+          <TabsContent value="attendance" className="space-y-4">
+            <AttendanceContent studentId={studentId} />
           </TabsContent>
           <TabsContent value="therapists" className="space-y-4">
             <TherapistContent singleStudent={singleStudent} />

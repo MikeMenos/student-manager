@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { BookHeart, Mail, Users } from "lucide-react";
+import { BookHeart, Mail, Phone, Users } from "lucide-react";
 import { StudentT } from "@/types/student.type";
 
 export default function TherapistContent({
@@ -30,6 +30,10 @@ export default function TherapistContent({
               <div className="flex items-center gap-2">
                 <BookHeart className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm">{therapist.therapistRole}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{therapist.phone}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />

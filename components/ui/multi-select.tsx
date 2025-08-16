@@ -9,7 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { SessionType } from "@/types/attendance.type";
+import { SessionType } from "@/types/session.type";
 import { TherapyCenters } from "@/types/therapistType";
 import { Check, X } from "lucide-react";
 import * as React from "react";

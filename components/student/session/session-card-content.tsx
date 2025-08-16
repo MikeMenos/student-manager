@@ -1,6 +1,6 @@
 "use client";
 
-import AttendanceForm from "@/components/forms/attendance-form";
+import SessionForm from "@/components/forms/session-form";
 import Error from "@/components/shared/error";
 import { Loader } from "@/components/shared/loader";
 import TileCardWrapper from "@/components/shared/tile-card-wrapper";
@@ -13,7 +13,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useDeleteAttendance } from "@/hooks/use-attendance";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useDeleteSession } from "@/hooks/use-session";
 import { useGetSingleStudent } from "@/hooks/use-student";
 import { formatToDDMMYYYY } from "@/lib/helpers";
 import { StudentT } from "@/types/student.type";
@@ -21,7 +29,7 @@ import { useUser } from "@clerk/nextjs";
 import { CalendarIcon, Clock, Edit, FileText, Trash, User } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 
-type AttendanceCardContentProps = {
+type SessionCardContentProps = {
   studentId: string;
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
@@ -29,13 +37,13 @@ type AttendanceCardContentProps = {
   setSelectedDate: Dispatch<SetStateAction<Date | undefined>>;
 };
 
-export default function AttendanceCardContent({
+export default function SessionCardContent({
   studentId,
   isOpen,
   setIsOpen,
   selectedDate,
   setSelectedDate,
-}: AttendanceCardContentProps) {
+}: SessionCardContentProps) {
   const [isEdit, setIsEdit] = useState(false);
 
   const { user } = useUser();
@@ -46,7 +54,7 @@ export default function AttendanceCardContent({
     isSingleStudentRefetching,
     refetchSingleStudent,
   } = useGetSingleStudent(studentId, selectedDate);
-  const { deleteAttendanceMutation } = useDeleteAttendance();
+  const { deleteSessionMutation } = useDeleteSession();
 
   const onOpenEditAttendanceForm = () => {
     setIsOpen(true);
@@ -59,9 +67,9 @@ export default function AttendanceCardContent({
     singleStudent?.therapists?.map((t) => [t.therapistId, t])
   );
   const matched =
-    singleStudent?.attendances?.map((attendance) => ({
-      ...attendance,
-      therapist: therapistMap.get(attendance.therapistId!) || null,
+    singleStudent?.sessions?.map((session) => ({
+      ...session,
+      therapist: therapistMap.get(session.therapistId!) || null,
     })) ?? [];
 
   return (
@@ -74,15 +82,13 @@ export default function AttendanceCardContent({
               Select Date
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              className="rounded-md border shadow w-full"
-              disabled={isSingleStudentRefetching || isSingleStudentLoading}
-            />
-          </CardContent>
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            className="w-full"
+            disabled={isSingleStudentRefetching || isSingleStudentLoading}
+          />
         </Card>
         <Card>
           <CardHeader>
@@ -112,11 +118,11 @@ export default function AttendanceCardContent({
                 <Error<StudentT> refetchData={refetchSingleStudent} />
               </div>
             ) : selectedDate &&
-              singleStudent?.attendances &&
-              singleStudent.attendances.length > 0 ? (
-              singleStudent.attendances.map((attendance) => (
-                <TileCardWrapper key={attendance.id}>
-                  <div className="p-3 md:p-6">
+              singleStudent?.sessions &&
+              singleStudent.sessions.length > 0 ? (
+              singleStudent.sessions.map((session) => (
+                <TileCardWrapper key={session.id}>
+                  <div className="p-4 md:px-5 md:py-3">
                     <div className="flex items-center justify-between">
                       <div className="flex gap-2 items-center justify-center">
                         <h2 className="text-xl font-semibold">Duration</h2>
@@ -132,9 +138,7 @@ export default function AttendanceCardContent({
                           </Button>
                           <Button
                             variant="destructive"
-                            onClick={() =>
-                              deleteAttendanceMutation(attendance.id!)
-                            }
+                            onClick={() => deleteSessionMutation(session.id!)}
                           >
                             <Trash className="h-3 w-3" />
                           </Button>
@@ -142,37 +146,83 @@ export default function AttendanceCardContent({
                       )}
                     </div>
                   </div>
-
-                  <CardContent className="p-3 md:p-6 flex items-end justify-between">
-                    <div className="flex items-baseline">
-                      <span className="text-5xl font-bold mr-2">
-                        {attendance.sessionDuration}
-                      </span>
-                      <span className="text-gray-600">
-                        {attendance.sessionDuration === 1 ? "hour" : "hours"}{" "}
-                        with{" "}
-                        <span className="font-semibold">
-                          {singleStudent.firstName} {singleStudent.lastName}
+                  <CardContent className="px-4 py-4 md:px-5 md:py-2 space-y-4">
+                    {/* Top row: duration + therapist (unchanged layout) */}
+                    <div className="flex items-end justify-between">
+                      <div className="flex items-baseline">
+                        <span className="text-5xl font-bold mr-2">
+                          {session.sessionDuration}
                         </span>
-                      </span>
+                        <span className="text-gray-600">
+                          {session.sessionDuration === 1 ? "hour" : "hours"}{" "}
+                          with{" "}
+                          <span className="font-semibold">
+                            {singleStudent.firstName} {singleStudent.lastName}
+                          </span>
+                        </span>
+                      </div>
+
+                      {role === "admin" &&
+                        matched
+                          ?.filter((a) => a.id === session.id)
+                          .map((a) => (
+                            <div
+                              key={a.id}
+                              className="flex items-center gap-2 text-gray-600"
+                            >
+                              <User className="h-4 w-4" />
+                              {a.therapist?.therapistName ??
+                                "Unknown therapist"}
+                            </div>
+                          ))}
                     </div>
-                    {role === "admin" &&
-                      matched
-                        ?.filter((a) => a.id === attendance.id)
-                        .map((a) => (
-                          <div
-                            key={a.id}
-                            className="flex items-center gap-2 text-gray-600"
-                          >
-                            <User />
-                            {a.therapist?.therapistName ?? "Unknown therapist"}
+
+                    {/* Session notes */}
+                    {session.sessionNotes?.trim() ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <div className="cursor-pointer rounded-xl border bg-muted/30 p-3 md:p-4 hover:bg-muted/50 transition">
+                            <div className="flex items-start gap-3">
+                              <FileText className="h-5 w-5 mt-0.5 text-muted-foreground shrink-0" />
+                              <div className="min-w-0 flex-1">
+                                <div className="mb-1 text-sm font-medium">
+                                  Session notes
+                                </div>
+                                <p className="text-sm text-muted-foreground line-clamp-2">
+                                  {session.sessionNotes}
+                                </p>
+                              </div>
+                            </div>
                           </div>
-                        ))}
+                        </DialogTrigger>
+
+                        <DialogContent className="sm:max-w-lg">
+                          <DialogHeader>
+                            <DialogTitle>
+                              Notes — {singleStudent.firstName}{" "}
+                              {singleStudent.lastName}
+                            </DialogTitle>
+                          </DialogHeader>
+                          <ScrollArea className="max-h-[60vh] pr-4">
+                            <p className="whitespace-pre-wrap text-sm leading-6">
+                              {session.sessionNotes}
+                            </p>
+                          </ScrollArea>
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <div className="rounded-xl border bg-muted/20 p-3 md:p-4 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          No session notes added.
+                        </div>
+                      </div>
+                    )}
                   </CardContent>
-                  <AttendanceForm
+                  <SessionForm
                     studentId={studentId}
                     studentName={`${singleStudent.firstName} ${singleStudent.lastName}`}
-                    formData={attendance}
+                    formData={session}
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     isEdit={isEdit}
