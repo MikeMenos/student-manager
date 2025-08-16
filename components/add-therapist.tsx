@@ -84,7 +84,7 @@ export default function AddTherapist({
         }
         className="mt-8"
       >
-        Add Therapist
+        Add therapist
       </Button>
     </form>
   );

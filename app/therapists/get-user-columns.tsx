@@ -12,12 +12,58 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { TherapistCreationResponseT } from "@/types/therapistType";
 import { ColumnDef } from "@tanstack/react-table";
+import { parse, subMonths } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 
 export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
   {
     accessorKey: "therapistName",
     header: "Name",
+  },
+  {
+    accessorKey: "sessions",
+    header: "Total hours this month",
+    cell: ({ row }) => {
+      const sessions = row?.original?.sessions ?? [];
+      const thisMonth = new Date();
+
+      const sumForMonth = (target: Date) =>
+        sessions
+          .filter((a) => {
+            const d = parse(a.sessionDate as string, "dd-MM-yyyy", new Date());
+            return (
+              d.getMonth() === target.getMonth() &&
+              d.getFullYear() === target.getFullYear()
+            );
+          })
+          .reduce((sum, a) => sum + (a.sessionDuration || 0), 0);
+      const thisMonthHours = sumForMonth(thisMonth);
+
+      return thisMonthHours;
+    },
+  },
+  {
+    accessorKey: "sessions",
+    header: "Total hours previous month",
+    cell: ({ row }) => {
+      const sessions = row?.original?.sessions ?? [];
+      const thisMonth = new Date();
+      const lastMonth = subMonths(thisMonth, 1);
+
+      const sumForMonth = (target: Date) =>
+        sessions
+          .filter((a) => {
+            const d = parse(a.sessionDate as string, "dd-MM-yyyy", new Date());
+            return (
+              d.getMonth() === target.getMonth() &&
+              d.getFullYear() === target.getFullYear()
+            );
+          })
+          .reduce((sum, a) => sum + (a.sessionDuration || 0), 0);
+      const lastMonthHours = sumForMonth(lastMonth);
+
+      return lastMonthHours;
+    },
   },
   {
     accessorKey: "phone",
@@ -41,6 +87,7 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
   {
     id: "actions",
     cell: ({ row }) => {
+      console.log(row.original);
       const rowData = row.original;
       return (
         <DropdownMenu>

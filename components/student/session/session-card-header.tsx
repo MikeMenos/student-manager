@@ -43,7 +43,7 @@ export default function SessionCardHeader({
       {role !== "admin" && (
         <>
           <Button className="px-6" onClick={() => setIsOpen(true)}>
-            <Plus className="h-4 w-4 mr-1" /> Add Session
+            <Plus className="h-4 w-4 mr-1" /> Add session
           </Button>
           <SessionForm
             studentName={studentName}

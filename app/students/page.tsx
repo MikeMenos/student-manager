@@ -16,7 +16,7 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { useGetAllStudents } from "@/hooks/use-student";
 import { centerOptions } from "@/lib/utils";
 import { StudentT } from "@/types/student.type";
-import { Building, Search } from "lucide-react";
+import { Building, House, School, Search } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import StudentForm from "../../components/forms/student-form";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -77,7 +77,7 @@ export default function StudentsPage() {
             <div className="relative max-w-md">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by name, grade, age, or parent..."
+                placeholder="Search by name or parent..."
                 className="pl-8"
                 value={studentSearchInput}
                 onChange={handleSearchStudentInput}
@@ -134,6 +134,14 @@ export default function StudentsPage() {
                           <p className="text-sm text-muted-foreground">
                             {student.grade} • Age {student.age}
                           </p>
+                          <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
+                            <House size={15} />
+                            {student.homeAddress}
+                          </div>
+                          <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
+                            <School size={15} />
+                            {student.school}
+                          </div>
                           <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
                             <Building size={15} />
                             {student.center}

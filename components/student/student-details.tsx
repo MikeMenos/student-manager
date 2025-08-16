@@ -80,7 +80,9 @@ export default function StudentDetails({
               <TabsTrigger value="therapists">Therapists</TabsTrigger>
             )}
             <TabsTrigger value="sessions">Sessions</TabsTrigger>
-            <TabsTrigger value="attendance">Attendance</TabsTrigger>
+            {role !== "admin" && (
+              <TabsTrigger value="attendance">Attendance</TabsTrigger>
+            )}
             <TabsTrigger value="files">Files</TabsTrigger>
             {role === "admin" && (
               <TabsTrigger value="payments">Payments</TabsTrigger>

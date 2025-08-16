@@ -21,8 +21,6 @@ export async function GET(req: Request) {
     ? [
         { firstName: { contains: filter, mode: "insensitive" } },
         { lastName: { contains: filter, mode: "insensitive" } },
-        { grade: { contains: filter, mode: "insensitive" } },
-        { age: { contains: filter, mode: "insensitive" } },
         { center: { contains: filter, mode: "insensitive" } },
         {
           parentInfo: {

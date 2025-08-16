@@ -29,6 +29,7 @@ export async function GET(req: Request) {
 
     const data = await prisma.therapist.findMany({
       where: filterRaw ? { OR: ors } : undefined,
+      include: { sessions: true },
     });
     return NextResponse.json({ therapists: data });
   } catch (error) {

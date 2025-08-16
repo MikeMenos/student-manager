@@ -85,7 +85,7 @@ export default function Users() {
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4" />
-                Add Therapist
+                Add therapist
               </Button>
             </DialogTrigger>
             <DialogContent>

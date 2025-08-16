@@ -26,8 +26,10 @@ import { useGetSingleStudent } from "@/hooks/use-student";
 import { formatToDDMMYYYY } from "@/lib/helpers";
 import { StudentT } from "@/types/student.type";
 import { useUser } from "@clerk/nextjs";
+import { endOfMonth } from "date-fns";
 import { CalendarIcon, Clock, Edit, FileText, Trash, User } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Matcher } from "react-day-picker";
 
 type SessionCardContentProps = {
   studentId: string;
@@ -72,6 +74,14 @@ export default function SessionCardContent({
       therapist: therapistMap.get(session.therapistId!) || null,
     })) ?? [];
 
+  const disabledDays: Matcher[] = [
+    { after: endOfMonth(new Date()) }, // disable everything after this month
+  ];
+
+  if (isSingleStudentRefetching || isSingleStudentLoading) {
+    disabledDays.push({ before: new Date(), after: new Date() });
+  }
+
   return (
     <CardContent>
       <div className="grid xl:grid-cols-2 grid-cols-1 gap-2">
@@ -79,7 +89,7 @@ export default function SessionCardContent({
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CalendarIcon className="h-5 w-5" />
-              Select Date
+              Select date
             </CardTitle>
           </CardHeader>
           <Calendar
@@ -87,14 +97,14 @@ export default function SessionCardContent({
             selected={selectedDate}
             onSelect={setSelectedDate}
             className="w-full"
-            disabled={isSingleStudentRefetching || isSingleStudentLoading}
+            disabled={disabledDays}
           />
         </Card>
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="h-5 w-5" />
-              Session Details
+              Session details
               {isSingleStudentRefetching && !isSingleStudentLoading && (
                 <span className="ml-2 inline-flex items-center gap-2 text-xs text-muted-foreground">
                   <Loader size="sm" /> updating…
@@ -111,7 +121,7 @@ export default function SessionCardContent({
           <CardContent className="flex flex-col gap-3">
             {isSingleStudentLoading ? (
               <div className="py-10 flex justify-center">
-                <Loader size="lg" />
+                <Loader size="lg" />›
               </div>
             ) : isSingleStudentError ? (
               <div className="text-center py-10 text-red-500">

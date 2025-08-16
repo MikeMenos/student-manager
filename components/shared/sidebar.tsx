@@ -1,7 +1,7 @@
 "use client";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
-  Sidebar as SidebarShadcn,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
@@ -11,27 +11,26 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  Sidebar as SidebarShadcn,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { SIGN_IN_PATH } from "@/lib/utils";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import {
   GraduationCap,
   LayoutDashboard,
   LogOut,
-  Settings,
   Speech,
   Users,
 } from "lucide-react";
-import { usePathname } from "next/navigation";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { SignOutButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { SIGN_IN_PATH } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 const menuItems = [
   { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
   { title: "Therapists", icon: Speech, url: "/therapists" },
   { title: "Students", icon: Users, url: "/students" },
-  { title: "Settings", icon: Settings, url: "#" },
+  // { title: "Settings", icon: Settings, url: "#" },
 ];
 
 export default function Sidebar() {
