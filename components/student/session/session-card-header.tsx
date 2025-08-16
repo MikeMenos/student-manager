@@ -1,6 +1,6 @@
 import SessionForm from "@/components/forms/session-form";
 import { Button } from "@/components/ui/button";
-import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader } from "@/components/ui/card";
 import { SessionT } from "@/types/session.type";
 import { useUser } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
@@ -19,6 +19,7 @@ export const initialSessionFormState: SessionT = {
   sessionType: "Occupational",
   sessionDuration: 1,
   therapistId: "",
+  sessionNotes: "",
 };
 
 export default function SessionCardHeader({
