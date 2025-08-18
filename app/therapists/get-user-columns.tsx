@@ -249,7 +249,11 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
           <DropdownMenuContent align="end" className="bg-popover">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem
+              asChild
+              onSelect={(e) => e.preventDefault()}
+              className="bg-red-500 text-white focus:bg-red-600 focus:text-white hover:cursor-pointer"
+            >
               <div className="w-full">
                 <DeleteUserFromClerkAndDbButton rowData={rowData} />
               </div>

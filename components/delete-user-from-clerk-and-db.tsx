@@ -46,7 +46,7 @@ export default function DeleteUserFromClerkAndDbButton({
             }
             disabled={isDeleteUserFromClerkAndDbLoading}
           >
-            {isDeleteUserFromClerkAndDbLoading ? "Deleting..." : "Yes, Delete"}
+            Yes, Delete
           </Button>
         </DialogFooter>
       </DialogContent>
