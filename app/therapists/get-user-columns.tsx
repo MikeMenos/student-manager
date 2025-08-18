@@ -105,7 +105,7 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
 
       return (
         <div className="flex items-center gap-2">
-          <span className="font-medium">{(thisMonth || 0).toFixed(1)}h</span>
+          <span className="font-medium">{thisMonth || 0}h</span>
           <div
             className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs ${
               up
@@ -133,7 +133,7 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
       const { sessions } = row.original;
       const prev = subMonths(new Date(), 1);
       const last = monthHours(sessions, prev);
-      return <div className="text-left">{(last || 0).toFixed(1)}h</div>;
+      return <div className="text-left">{last || 0}h</div>;
     },
     meta: { align: "right" },
   },
