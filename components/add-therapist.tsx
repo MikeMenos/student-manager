@@ -25,6 +25,8 @@ export default function AddTherapist({
     setPhone("");
     setCenter("");
     setCenter("");
+    setCenter("");
+    setTherapistRole(undefined);
   };
 
   const { addTherapistMutation, isAddTherapistLoading } = useInviteTherapist(
@@ -48,6 +50,7 @@ export default function AddTherapist({
           onSelectTherapistRole={(therapistRole) =>
             setTherapistRole(therapistRole)
           }
+          value={therapistRole}
         />
       </div>
       <div className="grid gap-2">
@@ -65,6 +68,7 @@ export default function AddTherapist({
         <SelectCenter
           hasAllCenterOption={false}
           onSelectCenter={(center) => setCenter(center)}
+          value={center}
         />
       </div>
       <div className="grid gap-2">

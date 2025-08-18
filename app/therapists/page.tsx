@@ -81,7 +81,15 @@ export default function Users() {
               />
             </div>
           </div>
-          <Dialog open={isStudentFormOpen} onOpenChange={setIsStudentFormOpen}>
+          <Dialog
+            open={isStudentFormOpen}
+            onOpenChange={(open) => {
+              setIsStudentFormOpen(open);
+              if (!open) {
+                setTherapistRole(undefined);
+              }
+            }}
+          >
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4" />
