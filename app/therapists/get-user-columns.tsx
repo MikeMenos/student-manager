@@ -29,14 +29,6 @@ import {
   Phone,
 } from "lucide-react";
 
-const initials = (name?: string) =>
-  (name ?? "")
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((n) => n[0]?.toUpperCase())
-    .join("");
-
 const copyToClipboard = async (text?: string) => {
   if (!text) return;
   try {
@@ -138,19 +130,22 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
     meta: { align: "right" },
   },
 
-  // Phone with tel: and copy
   {
     accessorKey: "phone",
     header: "Phone",
     cell: ({ row }) => {
       const phone = row.original.phone;
       if (!phone) return <span className="text-muted-foreground">—</span>;
+
       return (
         <div className="flex items-center gap-2">
-          <p className="inline-flex items-center gap-1 underline-offset-4 hover:underline">
-            <Phone className="h-4 w-4" />
+          <a
+            href={`tel:${phone.replace(/\s+/g, "")}`}
+            className="inline-flex items-center gap-1 text-sm underline-offset-4 hover:underline"
+          >
+            <Phone className="h-4 w-4 text-muted-foreground" />
             {phone}
-          </p>
+          </a>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -159,6 +154,7 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
                   size="icon"
                   className="h-7 w-7"
                   onClick={() => copyToClipboard(phone)}
+                  aria-label="Copy phone"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
@@ -171,19 +167,23 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
     },
   },
 
-  // Email with mailto: and copy
+  // Email
   {
     accessorKey: "email",
     header: "Email",
     cell: ({ row }) => {
       const email = row.original.email;
       if (!email) return <span className="text-muted-foreground">—</span>;
+
       return (
         <div className="flex items-center gap-2">
-          <p className="inline-flex items-center gap-1 underline-offset-4 hover:underline">
-            <Mail className="h-4 w-4" />
+          <a
+            href={`mailto:${email}`}
+            className="inline-flex items-center gap-1 text-sm underline-offset-4 hover:underline"
+          >
+            <Mail className="h-4 w-4 text-muted-foreground" />
             {email}
-          </p>
+          </a>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -192,6 +192,7 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
                   size="icon"
                   className="h-7 w-7"
                   onClick={() => copyToClipboard(email)}
+                  aria-label="Copy email"
                 >
                   <Copy className="h-4 w-4" />
                 </Button>
