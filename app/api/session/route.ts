@@ -126,7 +126,7 @@ export async function DELETE(req: Request) {
     const existing = await prisma.session.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json(
-        { message: "Attendance not found" },
+        { message: "Session not found" },
         { status: 404 }
       );
     }
@@ -136,9 +136,9 @@ export async function DELETE(req: Request) {
 
     await prisma.session.delete({ where: { id } });
 
-    return NextResponse.json({ message: "Attendance deleted" });
+    return NextResponse.json({ message: "Session deleted" });
   } catch (error) {
-    console.error("Attendance DELETE error:", error);
+    console.error("Session DELETE error:", error);
     return NextResponse.json(
       { message: "Failed to delete session" },
       { status: 500 }
