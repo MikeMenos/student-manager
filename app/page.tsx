@@ -1,4 +1,4 @@
-"use cleint";
+"use client";
 import { APP_NAME } from "@/lib/utils";
 import { useUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
