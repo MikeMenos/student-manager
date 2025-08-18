@@ -158,31 +158,39 @@ export default function SessionCardContent({
                   </div>
                   <CardContent className="px-4 py-4 md:px-5 md:py-2 space-y-4">
                     {/* Top row: duration + therapist (unchanged layout) */}
-                    <div className="flex items-end justify-between">
-                      <div className="flex items-baseline">
-                        <span className="text-5xl font-bold mr-2">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4">
+                      {/* Left: big duration + text */}
+                      <div className="flex items-start gap-3 min-w-0">
+                        <span className="text-5xl sm:text-6xl font-bold leading-none">
                           {session.sessionDuration}
                         </span>
-                        <span className="text-gray-600">
-                          {session.sessionDuration === 1 ? "hour" : "hours"}{" "}
-                          with{" "}
-                          <span className="font-semibold">
-                            {singleStudent.firstName} {singleStudent.lastName}
-                          </span>
-                        </span>
+
+                        <div className="text-gray-600 leading-tight min-w-0">
+                          <div className="text-base">
+                            {session.sessionDuration === 1 ? "hour" : "hours"}
+                          </div>
+                          <div className="text-sm">
+                            with{" "}
+                            <span className="font-semibold">
+                              {singleStudent.firstName} {singleStudent.lastName}
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
+                      {/* Right: therapist chip (own row on mobile, right-aligned on sm+) */}
                       {role === "admin" &&
                         matched
                           ?.filter((a) => a.id === session.id)
                           .map((a) => (
-                            <div
-                              key={a.id}
-                              className="flex items-center gap-2 text-gray-600"
-                            >
-                              <User className="h-4 w-4" />
-                              {a.therapist?.therapistName ??
-                                "Unknown therapist"}
+                            <div key={a.id} className="sm:self-end">
+                              <span className="inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs text-gray-700 max-w-full">
+                                <User className="h-3 w-3 shrink-0" />
+                                <span className="truncate max-w-[12rem] sm:max-w-[18rem]">
+                                  {a.therapist?.therapistName ??
+                                    "Unknown therapist"}
+                                </span>
+                              </span>
                             </div>
                           ))}
                     </div>

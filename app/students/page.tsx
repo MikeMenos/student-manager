@@ -117,7 +117,7 @@ export default function StudentsPage() {
                     }`}
                     onClick={() => setSelectedStudent(student.id!)}
                   >
-                    <CardContent className="p-3 relative">
+                    <CardContent className="px-3 relative">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
                           <AvatarFallback>

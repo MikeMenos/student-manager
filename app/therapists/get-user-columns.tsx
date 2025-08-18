@@ -118,7 +118,7 @@ export const getUsersColumns = (): ColumnDef<TherapistCreationResponseT>[] => [
             ) : (
               <ArrowDownRight className="mr-1 h-3 w-3" />
             )}
-            {Math.abs(delta).toFixed(1)}h
+            {Math.abs(delta)}h
           </div>
         </div>
       );
