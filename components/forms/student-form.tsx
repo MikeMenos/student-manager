@@ -152,11 +152,11 @@ export default function StudentForm({
               <Plus className="h-4 w-4" />
             )}
 
-            {selectedStudent ? `Edit` : "Add student"}
+            {selectedStudent ? `` : "Add student"}
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-h-[85%] overflow-y-auto">
         <form onSubmit={(e) => handleCreateStudent(e)}>
           <DialogHeader>
             <DialogTitle className="mb-4">

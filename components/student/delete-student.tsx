@@ -11,6 +11,7 @@ import { useDeleteStudent } from "@/hooks/use-student";
 import { StudentT } from "@/types/student.type";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Button } from "../ui/button";
+import { Trash } from "lucide-react";
 
 export default function DeleteStudent({
   singleStudent,
@@ -35,7 +36,9 @@ export default function DeleteStudent({
   return (
     <Dialog open={isStudentDeleteOpen} onOpenChange={setIsStudentDeleteOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">Delete</Button>
+        <Button variant="destructive">
+          <Trash className="h-3 w-3" />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
