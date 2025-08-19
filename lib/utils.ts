@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const APP_NAME = "Therapy Institution Manager";
+export const APP_NAME = "Εν Λόγω ΔΙΕΠΙΣΤΗΜΟΝΙΚΟ ΚΕΝΤΡΟ";
 export const PROD_URL = "https://www.menoscodes.gr";
 export const DEV_URL =
   "https://therapy-institution-manager-development.up.railway.app";

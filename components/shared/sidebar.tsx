@@ -16,13 +16,8 @@ import {
 } from "@/components/ui/sidebar";
 import { SIGN_IN_PATH } from "@/lib/utils";
 import { SignOutButton, useUser } from "@clerk/nextjs";
-import {
-  GraduationCap,
-  LayoutDashboard,
-  LogOut,
-  Speech,
-  Users,
-} from "lucide-react";
+import { LayoutDashboard, LogOut, Speech, Users } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -50,11 +45,19 @@ export default function Sidebar() {
   return (
     <SidebarShadcn collapsible="icon">
       <SidebarHeader className="border-b">
-        {!open && <GraduationCap className="h-6 w-6 text-blue-600 mx-auto" />}
+        {!open && (
+          <div className="flex items-center gap-2 py-2 justify-center">
+            <Image
+              src="/logo-collapsed.png"
+              alt="ενλόγω"
+              width={50}
+              height={50}
+            />
+          </div>
+        )}
         {open && (
-          <div className="flex items-center gap-2 py-2">
-            <GraduationCap className="h-6 w-6 text-blue-600" />
-            <span className="font-semibold text-lg">EduManage</span>
+          <div className="flex items-center gap-2 py-2 justify-center">
+            <Image src="/logo.png" alt="ενλόγω" width={120} height={120} />
           </div>
         )}
       </SidebarHeader>
