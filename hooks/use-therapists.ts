@@ -17,6 +17,7 @@ export const useGetAllTherapists = ({
   const { data, isLoading, isError, refetch, isRefetching } = useQuery({
     queryKey: [THERAPISTS_QUERY_KEY, offset, filter],
     queryFn: () => getAllTherapists(filter),
+    staleTime: 0,
   });
 
   return {
